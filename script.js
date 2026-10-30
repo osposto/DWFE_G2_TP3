@@ -19,6 +19,42 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnEvaluar1 = document.getElementById('btn-evaluar-1');
   const outSim1 = document.getElementById('resultado-sim-1');
 
+  const flowSvg = document.querySelector('.flow-svg');
+
+  if (flowSvg) {
+    const flowNodes = flowSvg.querySelectorAll('.svg-interactive-node');
+    const flowLines = flowSvg.querySelectorAll('.svg-line[data-from][data-to]');
+
+    function selectFlowNode(selectedNode) {
+      const clearSelection = selectedNode.classList.contains('is-selected');
+      const selectedId = selectedNode.dataset.node;
+
+      flowSvg.classList.toggle('has-selection', !clearSelection);
+
+      flowNodes.forEach(node => {
+        const isSelected = !clearSelection && node === selectedNode;
+        node.classList.toggle('is-selected', isSelected);
+        node.setAttribute('aria-pressed', String(isSelected));
+      });
+
+      flowLines.forEach(line => {
+        const isConnected = !clearSelection
+          && (line.dataset.from === selectedId || line.dataset.to === selectedId);
+        line.classList.toggle('is-selected', isConnected);
+      });
+    }
+
+    flowNodes.forEach(node => {
+      node.addEventListener('click', () => selectFlowNode(node));
+      node.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          selectFlowNode(node);
+        }
+      });
+    });
+  }
+
   async function consultarAgente() {
     if (!btnEvaluar1 || !outSim1) return;
 

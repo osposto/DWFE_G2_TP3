@@ -647,6 +647,12 @@ body {
   color: var(--text-muted);
 }
 
+.flowchart-hint {
+  margin: -0.75rem 0 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
 .flowchart-legend {
   display: flex;
   align-items: center;
@@ -694,7 +700,7 @@ body {
 
 .flow-svg {
   display: block;
-  min-width: 880px;
+  min-width: 720px;
 }
 
 /* Nodos SVG */
@@ -730,9 +736,50 @@ body {
 
 .svg-line {
   fill: none;
-  stroke: #f36b21;
+  stroke: #60a5fa;
   stroke-width: 2;
-  stroke-dasharray: none;
+  stroke-dasharray: 7 7;
+  stroke-dashoffset: 0;
+  opacity: 1;
+  transition: opacity 0.2s ease, stroke-width 0.2s ease;
+}
+
+.flow-svg.has-selection .svg-line {
+  opacity: 0.14;
+}
+
+.flow-svg.has-selection .svg-line.is-selected {
+  opacity: 1;
+  stroke: #93c5fd;
+  stroke-width: 3;
+  animation: flowchart-flow 1.15s linear infinite;
+}
+
+@keyframes flowchart-flow {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+
+.svg-interactive-node {
+  cursor: pointer;
+  outline: none;
+}
+
+.svg-interactive-node .svg-node {
+  transition: filter 0.2s ease, stroke-width 0.2s ease;
+}
+
+.svg-interactive-node:hover .svg-node,
+.svg-interactive-node:focus-visible .svg-node {
+  filter: brightness(1.2) drop-shadow(0 0 5px rgba(96, 165, 250, 0.55));
+  stroke-width: 2.5;
+}
+
+.svg-interactive-node.is-selected .svg-node {
+  filter: brightness(1.14) drop-shadow(0 0 7px rgba(96, 165, 250, 0.65));
+  stroke: #f8fafc;
+  stroke-width: 3;
 }
 
 .svg-text {
@@ -767,6 +814,12 @@ body {
 
 .label-no {
   fill: #f87171;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-svg.has-selection .svg-line.is-selected {
+    animation: none;
+  }
 }
 
 /* ==========================================================================
@@ -1285,4 +1338,3 @@ body {
     grid-template-columns: 1fr;
   }
 }
-
