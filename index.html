@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FUL Y VALE APP — Propuesta de Soluciones Agénticas | TP3 IFTS 29</title>
+  <meta name="description" content="Landing page de presentación de FUL Y VALE APP y dos propuestas de automatización agéntica para partidos de básquet. IFTS 29 Front End.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Barra de Navegación Principal -->
+  <header class="navbar" role="banner">
+    <div class="container nav-container">
+      <a href="#hero" class="brand-link" aria-label="Ir al inicio de FUL Y VALE APP">
+        <img src="assets/logo.png" alt="Logo oficial de FUL Y VALE APP" class="brand-logo" width="46" height="54">
+        <div class="brand-info">
+          <span class="brand-title">FUL Y VALE APP</span>
+          <span class="brand-badge">Front End · IFTS 29</span>
+        </div>
+      </a>
+      <nav class="nav-menu" aria-label="Navegación de secciones">
+        <ul class="nav-list">
+          <li><a href="#presentacion" class="nav-link">La Startup</a></li>
+          <li><a href="#modulo-busqueda" class="nav-link">1. Búsqueda Asistida</a></li>
+          <li><a href="#modulo-inscripcion" class="nav-link">2. Inscripción y Pago</a></li>
+          <li><a href="#simulador" class="nav-link nav-btn-cta">Simulador en Vivo</a></li>
+          <li><a href="#equipo" class="nav-link">Equipo</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido-principal">
+
+    <!-- Sección Hero / Portada -->
+    <section id="hero" class="section hero-section">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <div class="badge-tag">
+            <span class="dot-indicator"></span>
+            TP3 · Dos sentencias, dos soluciones
+          </div>
+          <h1 class="hero-title">
+            Automatización Agéntica para Encuentros de <span class="text-gradient">Básquet</span>
+          </h1>
+          <p class="hero-description">
+            Presentamos la arquitectura de dos flujos de agentes inteligentes para <strong>FUL Y VALE APP</strong>: optimización proactiva de búsqueda de partidos y gestión atómica de reservas y pagos sin riesgo de sobreventa.
+          </p>
+          <div class="hero-actions">
+            <a href="#modulo-busqueda" class="btn btn-primary">Explorar Solución 1</a>
+            <a href="#modulo-inscripcion" class="btn btn-secondary">Explorar Solución 2</a>
+          </div>
+          <div class="hero-meta">
+            <div class="meta-item">
+              <span class="meta-label">Metodología</span>
+              <strong class="meta-val">100% Agéntica</strong>
+            </div>
+            <div class="meta-divider"></div>
+            <div class="meta-item">
+              <span class="meta-label">Desafío</span>
+              <strong class="meta-val">2 Bloques · 4 Sentencias</strong>
+            </div>
+            <div class="meta-divider"></div>
+            <div class="meta-item">
+              <span class="meta-label">Articulación</span>
+              <strong class="meta-val">IFTS 16 ➔ IFTS 29</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="hero-card-brand">
+            <div class="card-glow"></div>
+            <img src="assets/logo.png" alt="Escudo de FUL Y VALE APP" class="hero-card-logo">
+            <div class="card-caption">
+              <span class="caption-tag">Startup Asignada</span>
+              <h3 class="caption-title">FUL Y VALE APP</h3>
+              <p class="caption-sub">Deportes y encuentros recreativos</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección 1: Presentación de la Startup y Necesidad -->
+    <section id="presentacion" class="section bg-alt">
+      <div class="container">
+        <div class="section-header text-center">
+          <span class="section-eyebrow">Contexto Institucional</span>
+          <h2 class="section-title">De la Lógica Formal a la Interfaz Front-End</h2>
+          <p class="section-subtitle">
+            Cómo articulamos el trabajo de modelado del <strong>IFTS 16</strong> con el diseño de interacción y experiencia agéntica del <strong>IFTS 29</strong>.
+          </p>
+        </div>
+
+        <div class="grid-3 cards-info">
+          <article class="card card-feature">
+            <div class="feature-icon">🏀</div>
+            <h3 class="feature-title">Objetivo del Servicio</h3>
+            <p class="feature-text">
+              <strong>FUL Y VALE APP</strong> conecta a jugadoras y jugadores de básquet con partidos recreativos y competitivos según su <strong>ubicación geográfica</strong>, su <strong>disponibilidad horaria</strong> y su <strong>nivel de habilidad</strong> deportiva.
+            </p>
+          </article>
+
+          <article class="card card-feature">
+            <div class="feature-icon">🧩</div>
+            <h3 class="feature-title">El Problema a Resolver</h3>
+            <p class="feature-text">
+              Coordinar partidos amateurs suele generar frustración: búsquedas manuales tediosas, falta de compatibilidad de nivel, desorganización en el cobro de aranceles de canchas y el riesgo constante de sobrecupos (*overbooking*).
+            </p>
+          </article>
+
+          <article class="card card-feature">
+            <div class="feature-icon">🤖</div>
+            <h3 class="feature-title">La Propuesta Agéntica</h3>
+            <p class="feature-text">
+              Diseñamos dos agentes de software especializados que actúan en segundo plano: uno asiste de forma no intrusiva en el <strong>emparejamiento</strong> y el otro custodia de manera transaccional la <strong>reserva y cobro</strong> de plazas.
+            </p>
+          </article>
+        </div>
+
+        <div class="banner-origin">
+          <div class="origin-content">
+            <span class="origin-badge">Articulación Interinstitucional</span>
+            <p>
+              Las condiciones de funcionamiento fueron formalizadas en proposiciones lógicas por estudiantes del <strong>IFTS 16</strong> (Bloques <code>S05-A</code> y <code>S05-B</code>). El equipo de Front End del <strong>IFTS 29</strong> diseñó la arquitectura de soluciones agénticas y su representación gráfica interactiva.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN MODULO 1: Búsqueda Asistida o Manual -->
+    <section id="modulo-busqueda" class="section">
+      <div class="container">
+        
+        <div class="module-header">
+          <div class="module-meta">
+            <span class="badge badge-accent">Bloque 1 · S05-A</span>
+            <span class="module-id">Solución 1 de 2</span>
+          </div>
+          <h2 class="module-title">Módulo de Emparejamiento Inteligente (Búsqueda Asistida o Manual)</h2>
+          <p class="module-benefit">
+            <strong>Beneficio clave:</strong> Brinda al jugador el poder de recibir partidos a su medida automáticamente en tiempo real, garantizando al mismo tiempo el control total para navegar de forma manual y autónoma sin bloqueos ni sugerencias invasivas.
+          </p>
+        </div>
+
+        <!-- Sentencias asignadas originales -->
+        <div class="sentences-box">
+          <h3 class="sentences-title">Sentencias Originales del Bloque</h3>
+          <div class="grid-2 sentences-grid">
+            <div class="sentence-item">
+              <span class="sentence-tag">Frase 1 · R1</span>
+              <blockquote class="sentence-quote">
+                «Si el usuario tiene activa la búsqueda asistida y completó zona, horario y nivel, el sistema busca partidos compatibles; muestra las coincidencias si existen y, si no existen, informa que no encontró resultados.»
+              </blockquote>
+            </div>
+            <div class="sentence-item">
+              <span class="sentence-tag">Frase 2 · R2</span>
+              <blockquote class="sentence-quote">
+                «Si el usuario desactiva la búsqueda asistida, el sistema mantiene disponible la búsqueda manual y deja de generar sugerencias automáticas.»
+              </blockquote>
+            </div>
+          </div>
+        </div>
+
+        <!-- Diagrama de Flujo 1 (SVG) -->
+        <div class="flowchart-container">
+          <div class="flowchart-header">
+            <div class="flowchart-title-wrap">
+              <h3 class="flowchart-title">Diagrama de Recorrido Agéntico: Búsqueda y Sugerencias</h3>
+              <p class="flowchart-sub">Representación gráfica de entradas, bifurcaciones de decisión, casos límite y resultados.</p>
+            </div>
+            <div class="flowchart-legend">
+              <span class="legend-chip chip-start">Inicio / Fin</span>
+              <span class="legend-chip chip-decision">Decisión</span>
+              <span class="legend-chip chip-action">Acción de Agente</span>
+              <span class="legend-chip chip-human">Excepción / Usuario</span>
+            </div>
+          </div>
+
+          <div class="svg-wrapper">
+            <svg viewBox="0 0 960 480" width="100%" height="auto" class="flow-svg" role="img" aria-label="Diagrama de flujo agéntico para búsqueda asistida o manual">
+              <defs>
+                <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#f36b21" />
+                </marker>
+                <marker id="arrow-gray" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#94a3b8" />
+                </marker>
+              </defs>
+
+              <!-- Paso 1: Inicio -->
+              <rect x="30" y="30" width="180" height="60" rx="30" class="svg-node node-start" />
+              <text x="120" y="58" class="svg-text title">Inicio</text>
+              <text x="120" y="74" class="svg-text desc">Usuario abre buscador</text>
+
+              <!-- Conexión a Decisión 1 -->
+              <path d="M 210 60 L 280 60" class="svg-line" marker-end="url(#arrow)" />
+
+              <!-- Decisión 1: ¿Búsqueda Asistida Activa? -->
+              <polygon points="370,10 460,60 370,110 280,60" class="svg-node node-decision" />
+              <text x="370" y="55" class="svg-text title">¿Búsqueda</text>
+              <text x="370" y="72" class="svg-text desc">asistida activa?</text>
+
+              <!-- Rama NO: R2 -->
+              <path d="M 370 110 L 370 210" class="svg-line" marker-end="url(#arrow)" />
+              <text x="385" y="150" class="svg-label label-no">NO (R2)</text>
+
+              <!-- Nodo Acción R2 -->
+              <rect x="270" y="210" width="200" height="75" rx="10" class="svg-node node-action" />
+              <text x="370" y="235" class="svg-text title">Desactivar sugerencias</text>
+              <text x="370" y="255" class="svg-text desc">Mantener disponible</text>
+              <text x="370" y="272" class="svg-text desc">la búsqueda manual</text>
+
+              <path d="M 370 285 L 370 350" class="svg-line" marker-end="url(#arrow-gray)" />
+              <rect x="290" y="350" width="160" height="50" rx="25" class="svg-node node-end" />
+              <text x="370" y="380" class="svg-text title">Fin: Modo Manual</text>
+
+              <!-- Rama SÍ de Decisión 1: Hacia Validación de Campos -->
+              <path d="M 460 60 L 530 60" class="svg-line" marker-end="url(#arrow)" />
+              <text x="495" y="50" class="svg-label label-yes">SÍ</text>
+
+              <!-- Decisión 2: ¿Zona, Horario y Nivel completos? -->
+              <polygon points="620,10 710,60 620,110 530,60" class="svg-node node-decision" />
+              <text x="620" y="55" class="svg-text title">¿Completó zona,</text>
+              <text x="620" y="72" class="svg-text desc">horario y nivel?</text>
+
+              <!-- Rama NO Decisión 2: Faltan datos -->
+              <path d="M 620 110 L 620 180" class="svg-line" marker-end="url(#arrow)" />
+              <text x="635" y="140" class="svg-label label-no">NO</text>
+              <rect x="530" y="180" width="180" height="60" rx="10" class="svg-node node-human" />
+              <text x="620" y="205" class="svg-text title">Solicitar datos</text>
+              <text x="620" y="224" class="svg-text desc">faltantes al usuario</text>
+
+              <!-- Rama SÍ Decisión 2: Consultar Base de Partidos -->
+              <path d="M 710 60 L 780 60" class="svg-line" marker-end="url(#arrow)" />
+              <text x="745" y="50" class="svg-label label-yes">SÍ</text>
+
+              <!-- Decisión 3: ¿Existen Coincidencias? -->
+              <polygon points="860,10 940,60 860,110 780,60" class="svg-node node-decision" />
+              <text x="860" y="55" class="svg-text title">¿Existen</text>
+              <text x="860" y="72" class="svg-text desc">coincidencias?</text>
+
+              <!-- Rama SÍ Decisión 3: Mostrar Coincidencias (R1) -->
+              <path d="M 860 110 L 860 180" class="svg-line" marker-end="url(#arrow)" />
+              <text x="875" y="140" class="svg-label label-yes">SÍ (R1)</text>
+              <rect x="765" y="180" width="190" height="65" rx="10" class="svg-node node-action" />
+              <text x="860" y="206" class="svg-text title">Mostrar partidos</text>
+              <text x="860" y="225" class="svg-text desc">compatibles hallados</text>
+
+              <path d="M 860 245 L 860 300" class="svg-line" marker-end="url(#arrow)" />
+              <rect x="780" y="300" width="160" height="50" rx="25" class="svg-node node-end" />
+              <text x="860" y="330" class="svg-text title">Fin: Coincidencias</text>
+
+              <!-- Rama NO Decisión 3: Informar que no hay + Propone (Alerta / Radio) -->
+              <path d="M 940 60 L 950 60 L 950 380 L 880 380" class="svg-line" marker-end="url(#arrow)" />
+              <text x="905" y="370" class="svg-label label-no">NO (R1)</text>
+
+              <rect x="670" y="350" width="210" height="70" rx="10" class="svg-node node-human" />
+              <text x="775" y="375" class="svg-text title">Informar sin resultados</text>
+              <text x="775" y="393" class="svg-text desc">★ Propone: Sugerir radio</text>
+              <text x="775" y="408" class="svg-text desc">o crear alerta inteligente</text>
+
+              <path d="M 670 385 L 610 385" class="svg-line" marker-end="url(#arrow-gray)" />
+              <rect x="470" y="360" width="140" height="50" rx="25" class="svg-node node-end" />
+              <text x="540" y="390" class="svg-text title">Fin: Notificado</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Desplegables de Detalles Técnicos -->
+        <div class="details-section">
+          <h3 class="details-main-heading">Especificación Detallada de la Propuesta (Módulo 1)</h3>
+          
+          <details class="accordion-item" open>
+            <summary class="accordion-trigger">
+              <span class="trigger-title">1. Datos de Entrada requeridos por el Agente</span>
+              <span class="trigger-icon" aria-hidden="true">▾</span>
+            </summary>
+            <div class="accordion-body">
+              <ul class="spec-list">
+                <li><strong>Estado de la funcionalidad:</strong> Booleano (`busqueda_asistida: true | false`) controlado por switch en UI.</li>
+                <li><strong>Zona geográfica:</strong> Comuna, coordenadas de geolocalización o barrio preferido por el jugador.</li>
+                <li><strong>Franja horaria:</strong> Rangos disponibles (p. ej. "Días hábiles 19:00 a 22:00 hs", "Sábados por la mañana").</li>
+                <li><strong>Nivel deportivo:</strong> Categoría autoevaluada (`Principiante`, `Intermedio`, `Avanzado / Federado`).</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="accordion-item">
+            <summary class="accordion-trigger">
+              <span class="trigger-title">2. Lógica de Decisión y Reglas de Negocio</span>
+              <span class="trigger-icon" aria-hidden="true">▾</span>
+            </summary>
+            <div class="accordion-body">
+              <p>
+                El agente evalúa primero el estado de consentimiento del usuario. Si está en <code>False</code> (R2), desvincula de inmediato el proceso en segundo plano para respetar la privacidad y economía de recursos. Si está en <code>True</code>, valida que la tupla <code>(Zona, Horario, Nivel)</code> esté completa. Con los tres parámetros válidos, ejecuta un query ponderado contra el catálogo de partidos activos en estado <code>Abierto</code>.
+              </p>
+            </div>
+          </details>
+
+          <details class="accordion-item">
+            <summary class="accordion-trigger">
+              <span class="trigger-title">3. Acciones del Agente y Herramientas que consultaría</span>
+              <span class="trigger-icon" aria-hidden="true">▾</span>
+            </summary>
+            <div class="accordion-body">
+              <ul class="spec-list">
+                <li><strong>API de Geocodificación y Mapas:</strong> Para calcular distancias reales a las canchas y no solo cercanía lineal.</li>
+                <li><strong>Servicio de Calendario y Disponibilidad:</strong> Consulta el índice de encuentros que aún dispongan de al menos 1 vacante.</li>
+                <li><strong>Motor de Notificaciones Push:</strong> Informa al usuario de inmediato sin necesidad de recargar la pantalla.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="accordion-item">
+            <summary class="accordion-trigger">
+              <span class="trigger-title">4. Casos Límite y Manejo de Excepciones (Nivel Propone)</span>
+              <span class="trigger-icon" aria-hidden="true">▾</span>
+            </summary>
+            <div class="accordion-body">
+              <p>
+                <strong>¿Qué ocurre cuando no existen partidos exactamente compatibles?</strong> La regla R1 exige informar que no se encontraron resultados. Para alcanzar el nivel <em>Propone</em>, el agente no se detiene en un mensaje pasivo: presenta al usuario la opción de activar un <em>«Vigilante de Vacantes»</em> (que le notificará si se abre un cupo afín) o ajustar automáticamente la tolerancia geográfica a un radio de 5 km adicionales, requiriendo siempre la confirmación del usuario para no vulnerar su preferencia.
+              </p>
+            </div>
+          </details>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECCIÓN MODULO 2: Inscripción y Pago -->
+    <section id="modulo-inscripcion" class="section bg-alt">
+      <div class="container">
+        
+        <div class="module-header">
+          <div class="module-meta">
+            <span class="badge badge-accent">Bloque 2 · S05-B</span>
+            <span class="module-id">Solución 2 de 2</span>
+          </div>
+          <h2 class="module-title">Módulo Transaccional de Cupos y Pagos Seguros</h2>
+          <p class="module-benefit">
+            <strong>Beneficio clave:</strong> Erradica por completo el riesgo de <em>overbooking</em> (sobreventa de plazas) mediante reservas transaccionales con bloqueo temporal, protegiendo tanto la plaza del deportista como el cobro del organizador.
+          </p>
+        </div>
+
+        <!-- Sentencias asignadas originales -->
+        <div class="sentences-box">
+          <h3 class="sentences-title">Sentencias Originales del Bloque</h3>
+          <div class="grid-2 sentences-grid">
+            <div class="sentence-item">
+              <span class="sentence-tag">Frase 1 · R3</span>
+              <blockquote class="sentence-quote">
+                «Si un usuario cumple los requisitos del partido, solicita inscribirse, aún no tiene una inscripción y hay cupo libre, el sistema reserva un cupo e inicia una inscripción pendiente; si el partido es arancelado, muestra el pago pendiente.»
+              </blockquote>
+            </div>
+            <div class="sentence-item">
+              <span class="sentence-tag">Frase 2 · R4</span>
+              <blockquote class="sentence-quote">
+                «Si existe una inscripción pendiente en un partido arancelado y su pago todavía no fue confirmado, el sistema mantiene esa inscripción pendiente y no la confirma.»
+              </blockquote>
+            </div>
+          </div>
+        </div>
+
+        <!-- Diagrama de Flujo 2 (SVG) -->
+        <div class="flowchart-container">
+          <div class="flowchart-header">
+            <div class="flowchart-title-wrap">
+              <h3 class="flowchart-title">Diagrama de Recorrido Agéntico: Reserva, Cupos y Pagos</h3>
+              <p class="flowchart-sub">Flujo de validación transaccional, cronómetro de retención, webhooks y resolución de excepciones.</p>
+            </div>
+            <div class="flowchart-legend">
+              <span class="legend-chip chip-start">Inicio / Fin</span>
+              <span class="legend-chip chip-decision">Decisión</span>
+              <span class="legend-chip chip-action">Acción de Agente</span>
+              <span class="legend-chip chip-human">Excepción / Soporte Humano</span>
+            </div>
+          </div>
+
+          <div class="svg-wrapper">
+            <svg viewBox="0 0 960 520" width="100%" height="auto" class="flow-svg" role="img" aria-label="Diagrama de flujo agéntico para inscripción y pago de partidos">
+              <defs>
+                <marker id="arrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#f36b21" />
+                </marker>
+                <marker id="arrow2-gray" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#94a3b8" />
+                </marker>
+              </defs>
+
+              <!-- Paso 1: Inicio -->
+              <rect x="20" y="40" width="160" height="60" rx="30" class="svg-node node-start" />
+              <text x="100" y="66" class="svg-text title">Inicio</text>
+              <text x="100" y="84" class="svg-text desc">Solicita inscripción</text>
+
+              <path d="M 180 70 L 240 70" class="svg-line" marker-end="url(#arrow2)" />
+
+              <!-- Decisión 1: Requisitos + Sin inscripción previa + Cupo libre (R3) -->
+              <polygon points="340,15 440,70 340,125 240,70" class="svg-node node-decision" />
+              <text x="340" y="60" class="svg-text title">¿Cumple requisitos,</text>
+              <text x="340" y="75" class="svg-text desc">sin inscripción y</text>
+              <text x="340" y="90" class="svg-text desc">con cupo libre?</text>
+
+              <!-- Rama NO Decisión 1 -->
+              <path d="M 340 125 L 340 200" class="svg-line" marker-end="url(#arrow2-gray)" />
+              <text x="355" y="160" class="svg-label label-no">NO</text>
+              <rect x="250" y="200" width="180" height="60" rx="10" class="svg-node node-human" />
+              <text x="340" y="225" class="svg-text title">Rechazar solicitud</text>
+              <text x="340" y="244" class="svg-text desc">Informar motivo al jugador</text>
+
+              <path d="M 340 260 L 340 310" class="svg-line" marker-end="url(#arrow2-gray)" />
+              <rect x="260" y="310" width="160" height="45" rx="22" class="svg-node node-end" />
+              <text x="340" y="338" class="svg-text title">Fin: Sin inscripción</text>
+
+              <!-- Rama SÍ Decisión 1: Reserva de cupo transaccional -->
+              <path d="M 440 70 L 510 70" class="svg-line" marker-end="url(#arrow2)" />
+              <text x="475" y="60" class="svg-label label-yes">SÍ (R3)</text>
+
+              <rect x="510" y="35" width="180" height="70" rx="10" class="svg-node node-action" />
+              <text x="600" y="60" class="svg-text title">Reservar 1 Cupo</text>
+              <text x="600" y="78" class="svg-text desc">Crear estado:</text>
+              <text x="600" y="94" class="svg-text desc">Inscripción Pendiente</text>
+
+              <!-- Conexión a Decisión 2: ¿Arancelado? -->
+              <path d="M 690 70 L 750 70" class="svg-line" marker-end="url(#arrow2)" />
+
+              <polygon points="830,20 910,70 830,120 750,70" class="svg-node node-decision" />
+              <text x="830" y="64" class="svg-text title">¿Partido es</text>
+              <text x="830" y="80" class="svg-text desc">arancelado?</text>
+
+              <!-- Rama NO Decisión 2: Partido Gratuito -->
+              <path d="M 910 70 L 930 70 L 930 180 L 880 180" class="svg-line" marker-end="url(#arrow2)" />
+              <text x="895" y="140" class="svg-label label-no">NO (Gratis)</text>
+              <rect x="730" y="160" width="150" height="55" rx="10" class="svg-node node-action" />
+              <text x="805" y="185" class="svg-text title">Confirmar lugar</text>
+              <text x="805" y="202" class="svg-text desc">Inscripción lista</text>
+
+              <path d="M 805 215 L 805 260" class="svg-line" marker-end="url(#arrow2)" />
+              <rect x="725" y="260" width="160" height="45" rx="22" class="svg-node node-end" />
+              <text x="805" y="288" class="svg-text title">Fin: Confirmado</text>
+
+              <!-- Rama SÍ Decisión 2: Partido Arancelado (R3) -->
+              <path d="M 830 120 L 830 220 L 670 220" class="svg-line" marker-end="url(#arrow2)" />
+              <text x="760" y="210" class="svg-label label-yes">SÍ (Arancel)</text>
+
+              <rect x="490" y="190" width="180" height="60" rx="10" class="svg-node node-action" />
+              <text x="580" y="215" class="svg-text title">Mostrar Pago Pendiente</text>
+              <text x="580" y="234" class="svg-text desc">Iniciar lock con timeout</text>
+
+              <!-- Conexión a Decisión 3: ¿Pago confirmado? (R4) -->
+              <path d="M 580 250 L 580 300" class="svg-line" marker-end="url(#arrow2)" />
+
+              <polygon points="580,300 660,350 580,400 500,350" class="svg-node node-decision" />
+              <text x="580" y="344" class="svg-text title">¿Pago confirmado</text>
+              <text x="580" y="362" class="svg-text desc">por pasarela?</text>
+
+              <!-- SÍ pago confirmado -->
+              <path d="M 660 350 L 730 350" class="svg-line" marker-end="url(#arrow2)" />
+              <text x="695" y="340" class="svg-label label-yes">SÍ</text>
+              <rect x="730" y="325" width="160" height="50" rx="10" class="svg-node node-action" />
+              <text x="810" y="348" class="svg-text title">Confirmar inscripción</text>
+              <text x="810" y="364" class="svg-text desc">Emitir pase digital</text>
+
+              <!-- NO confirmado aún: R4 -->
+              <path d="M 500 350 L 420 350" class="svg-line" marker-end="url(#arrow2)" />
+              <text x="450" y="340" class="svg-label label-no">NO (R4)</text>
+
+              <rect x="220" y="325" width="200" height="65" rx="10" class="svg-node node-action" />
+              <text x="320" y="350" class="svg-text title">Mantener pendiente (R4)</text>
+              <text x="320" y="367" class="svg-text desc">No confirmar ni liberar</text>
+              <text x="320" y="382" class="svg-text desc">hasta fin de tiempo</text>
+
+              <!-- Excepción de pago / Intervención Humana (Propone) -->
+              <path d="M 320 390 L 320 440" class="svg-line" marker-end="url(#arrow2)" />
+              <rect x="210" y="440" width="220" height="65" rx="10" class="svg-node node-human" />
+              <text x="320" y="462" class="svg-text title">★ Intervención Humana</text>
+              <text x="320" y="480" class="svg-text desc">Derivar a soporte si usuario</text>
+              <text x="320" y="495" class="svg-text desc">reclama pago debitado</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Desplegables de Detalles Técnicos -->
+        <div class="details-section">
+          <h3 class="details-main-heading">Especificación Detallada de la Propuesta (Módulo 2)</h3>
+          
+          <details class="accordion-item" open>
+            <summary class="accordion-trigger">
+              <span class="trigger-title">1. Datos de Entrada requeridos por el Agente</span>
+              <span class="trigger-icon" aria-hidden="true">▾</span>
+            </summary>
+            <div class="accordion-body">
+              <ul class="spec-list">
+                <li><strong>Identificador de Jugador y Partido:</strong> Token de sesión del usuario y clave única del encuentro.</li>
+                <li><strong>Condición de elegibilidad:</strong> Nivel adecuado al partido, ausencia de penalizaciones por ausentismo previo.</li>
+                <li><strong>Estado de cupo en vivo:</strong> Cantidad de vacantes remanentes (`cupos_disponibles > 0`).</li>
+                <li><strong>Tipo arancelario y costo:</strong> Atributo booleano `es_arancelado` y monto exacto de la seña.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="accordion-item">
+            <summary class="accordion-trigger">
+              <span class="trigger-title">2. Lógica de Decisión y Control de Concurrencia</span>
+              <span class="trigger-icon" aria-hidden="true">▾</span>
+            </summary>
+            <div class="accordion-body">
+              <p>
+                Para cumplir con la sentencia R3, el agente efectúa una operación de tipo <strong>reserva con bloqueo transaccional (*lock*)</strong>. Si un usuario cumple los requisitos y no estaba inscripto, se decrementa temporalmente el cupo y se establece el estado <code>Inscripción Pendiente</code>. Si el partido es arancelado, no se confirma el ingreso de inmediato, sino que se crea una sesión de pago vinculada a la pasarela externa.
+              </p>
+            </div>
+          </details>
+
+          <details class="accordion-item">
+            <summary class="accordion-trigger">
+              <span class="trigger-title">3. Acciones del Agente y Herramientas que consultaría</span>
+              <span class="trigger-icon" aria-hidden="true">▾</span>
+            </summary>
+            <div class="accordion-body">
+              <ul class="spec-list">
+                <li><strong>Pasarela de Cobros (Webhook de Pagos):</strong> Escucha asíncrona de eventos de acreditación (`payment_intent.succeeded` o equivalente).</li>
+                <li><strong>Base de Datos Transaccional:</strong> Base de datos con soporte ACID para asegurar que dos solicitudes paralelas no tomen el mismo y último cupo.</li>
+                <li><strong>Servicio de Temporizador de Expiración (*TTL / Lock*):</strong> Mantiene el cupo retenido por 15 minutos exactos mientras el pago esté pendiente.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="accordion-item">
+            <summary class="accordion-trigger">
+              <span class="trigger-title">4. Casos Límite y Derivación a Moderación Humana (Nivel Propone)</span>
+              <span class="trigger-icon" aria-hidden="true">▾</span>
+            </summary>
+            <div class="accordion-body">
+              <p>
+                <strong>¿Qué sucede si expira el tiempo de pago pero el dinero fue debitado de la cuenta bancaria del jugador?</strong> Según la regla R4, el sistema no puede confirmar automáticamente una inscripción cuyo pago no haya sido acreditado. Sin embargo, para responder al nivel <em>Propone</em> de la rúbrica institucional, el agente no cancela de forma destructiva la transacción: si el usuario sube un comprobante de débito o emite una queja, el agente abre un <strong>ticket de revisión humana prioritaria</strong>, congelando la vacante durante 30 minutos adicionales para que un administrador del club verifique el extracto contable antes de liberar la plaza.
+              </p>
+            </div>
+          </details>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECCIÓN INTERACTIVA ADICIONAL: Simulador de Flujos Agénticos (Nivel Propone) -->
+    <section id="simulador" class="section">
+      <div class="container">
+        <div class="section-header text-center">
+          <span class="section-eyebrow">Recurso de Navegación y Explicación</span>
+          <h2 class="section-title">Simulador de Respuestas del Agente</h2>
+          <p class="section-subtitle">
+            Poné a prueba las 4 reglas (R1, R2, R3 y R4) en tiempo real para verificar cómo razona y decide cada agente ante distintos estados del sistema.
+          </p>
+        </div>
+
+        <div class="simulator-grid">
+          <!-- Simulador Módulo 1 -->
+          <div class="sim-card">
+            <div class="sim-badge">Módulo 1 · Búsqueda</div>
+            <h3 class="sim-title">Prueba de Búsqueda Asistida</h3>
+            
+            <form id="form-sim-1" class="sim-form" onsubmit="return false;">
+              <div class="form-group">
+                <label class="switch-label">
+                  <input type="checkbox" id="sim-asistida" checked>
+                  <span class="switch-slider"></span>
+                  <span class="switch-text">Búsqueda Asistida Activa</span>
+                </label>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="sim-zona">Zona:</label>
+                  <select id="sim-zona" class="form-control">
+                    <option value="palermo">Palermo (CABA)</option>
+                    <option value="caballito">Caballito (CABA)</option>
+                    <option value="">-- Sin completar --</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="sim-nivel">Nivel:</label>
+                  <select id="sim-nivel" class="form-control">
+                    <option value="intermedio">Intermedio</option>
+                    <option value="avanzado">Avanzado</option>
+                    <option value="">-- Sin completar --</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="sim-horario">Horario:</label>
+                <select id="sim-horario" class="form-control">
+                  <option value="19:00">19:00 a 21:00 hs</option>
+                  <option value="">-- Sin completar --</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="sim-hay-partidos" checked>
+                  <span>Existen partidos en base de datos para estos filtros</span>
+                </label>
+              </div>
+
+              <button type="button" id="btn-evaluar-1" class="btn btn-primary btn-block">Evaluar Regla Agéntica</button>
+            </form>
+
+            <div id="resultado-sim-1" class="sim-output" aria-live="polite">
+              <span class="output-label">Decisión del Agente:</span>
+              <p class="output-text">Seleccioná los parámetros y hacé clic en evaluar para ver la resolución.</p>
+            </div>
+          </div>
+
+          <!-- Simulador Módulo 2 -->
+          <div class="sim-card">
+            <div class="sim-badge">Módulo 2 · Cupos y Pagos</div>
+            <h3 class="sim-title">Prueba de Inscripción y Reserva</h3>
+            
+            <form id="form-sim-2" class="sim-form" onsubmit="return false;">
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="sim-requisitos" checked>
+                  <span>Cumple requisitos del partido (nivel/edad)</span>
+                </label>
+              </div>
+
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="sim-sin-inscripcion" checked>
+                  <span>Aún NO tiene inscripción previa en este partido</span>
+                </label>
+              </div>
+
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="sim-hay-cupo" checked>
+                  <span>Hay cupo libre en la cancha</span>
+                </label>
+              </div>
+
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="sim-arancelado" checked>
+                  <span>El partido es arancelado (requiere pago)</span>
+                </label>
+              </div>
+
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="sim-pago-confirmado">
+                  <span>Pago confirmado por la pasarela bancaria</span>
+                </label>
+              </div>
+
+              <button type="button" id="btn-evaluar-2" class="btn btn-primary btn-block">Evaluar Regla Agéntica</button>
+            </form>
+
+            <div id="resultado-sim-2" class="sim-output" aria-live="polite">
+              <span class="output-label">Decisión del Agente:</span>
+              <p class="output-text">Seleccioná los parámetros y hacé clic en evaluar para ver la resolución.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECCIÓN EQUIPO E INFORMACIÓN DE ENTREGA -->
+    <section id="equipo" class="section bg-alt">
+      <div class="container">
+        <div class="section-header text-center">
+          <span class="section-eyebrow">IFTS 29 · Desarrollo de Sistemas Web Front End</span>
+          <h2 class="section-title">Equipo de Trabajo y Construcción</h2>
+          <p class="section-subtitle">
+            Proyecto desarrollado bajo modalidad 100% agéntica orientada al cumplimiento de la rúbrica en nivel <strong>Propone</strong>.
+          </p>
+        </div>
+
+        <div class="team-grid">
+          <article class="team-card">
+            <div class="team-avatar">OR</div>
+            <h3 class="team-name">Orlando</h3>
+            <span class="team-role">Coordinación & Prompts</span>
+            <p class="team-desc">Dirección general del agente en Antigravity IDE, definición de requerimientos funcionales y validación del recorrido de usuario.</p>
+          </article>
+
+          <article class="team-card">
+            <div class="team-avatar">AD</div>
+            <h3 class="team-name">Adriana</h3>
+            <span class="team-role">Lógica & Casos Límite</span>
+            <p class="team-desc">Desmonte de lógica proposicional (R1-R4), diseño de condiciones de borde y especificación de intervención humana en pagos.</p>
+          </article>
+
+          <article class="team-card">
+            <div class="team-avatar">GU</div>
+            <h3 class="team-name">Guillermo</h3>
+            <span class="team-role">Arquitectura Visual & QA</span>
+            <p class="team-desc">Revisión de diagramas de flujo SVG, accesibilidad de componentes colapsables, pruebas desktop sin scroll lateral y despliegue.</p>
+          </article>
+        </div>
+
+        <div class="audit-card">
+          <div class="audit-header">
+            <h4>Ficha Técnica de Construcción Agéntica</h4>
+            <span class="audit-badge">100% Agéntico</span>
+          </div>
+          <div class="audit-body">
+            <div class="audit-item">
+              <span class="audit-key">Entorno de Trabajo:</span>
+              <span class="audit-val">Google Antigravity IDE</span>
+            </div>
+            <div class="audit-item">
+              <span class="audit-key">Modelo de IA:</span>
+              <span class="audit-val">Gemini 3.8 Flash (High)</span>
+            </div>
+            <div class="audit-item">
+              <span class="audit-key">Fecha de Entrega Oficial:</span>
+              <span class="audit-val">26 de Noviembre de 2026</span>
+            </div>
+            <div class="audit-item">
+              <span class="audit-key">Startup Asignada:</span>
+              <span class="audit-val">FUL Y VALE APP (IFTS 16) · Bloques S05-A y S05-B</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Pie de Página -->
+  <footer class="footer" role="contentinfo">
+    <div class="container footer-container">
+      <div class="footer-brand">
+        <img src="assets/logo.png" alt="Logo FUL Y VALE APP" class="footer-logo" width="32" height="38">
+        <div>
+          <p class="footer-copy"><strong>FUL Y VALE APP</strong> — Propuesta Agéntica de Front End</p>
+          <p class="footer-credits">Desarrollo Web Front End · IFTS 29 · Creado por Adriana, Guillermo y Orlando</p>
+        </div>
+      </div>
+      <div class="footer-links">
+        <a href="#hero" class="footer-anchor">Volver arriba ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

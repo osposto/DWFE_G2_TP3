@@ -1,0 +1,16 @@
+# Entornos y dependencias
+node_modules/
+.env
+.env.local
+
+# Vercel
+.vercel/
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Versión de prueba aislada (no modificar)
+Prueba1/
