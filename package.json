@@ -1,0 +1,26 @@
+{
+  "name": "tp3",
+  "version": "1.0.0",
+  "description": "> **IFTS 29 — Desarrollo de Sistemas Web (Front End)**   > **Ciclo Lectivo:** 2026 · 2do Cuatrimestre   > **Modalidad:** Grupal · Construcción 100% Agéntica   > **Evaluación:** Rúbrica institucional (Aprobado / Desaprobado — Orientado a nivel *Propone*)",
+  "main": "script.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/osposto/DWFE_G2_TP3.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/osposto/DWFE_G2_TP3/issues"
+  },
+  "homepage": "https://github.com/osposto/DWFE_G2_TP3#readme",
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}
