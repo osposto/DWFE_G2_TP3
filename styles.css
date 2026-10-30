@@ -854,8 +854,25 @@ body {
 }
 
 /* ==========================================================================
-   Simulador Interactivo de Flujos
+   Simulador Interactivo de Flujo Agéntico
    ========================================================================== */
+.simulator-single-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.sim-inputs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+@media (max-width: 768px) {
+  .sim-inputs-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .simulator-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
