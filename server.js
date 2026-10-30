@@ -22,8 +22,8 @@ app.get('/api/partidos', (req, res) => {
 // Endpoint del Agente Inteligente (Reglas R1 y R2 + Gemini 3.8 Flash)
 app.post('/api/agente-buscar', agenteBuscarHandler);
 
-// Fallback para SPA en desarrollo local
-app.get('*', (req, res) => {
+// Fallback para SPA en desarrollo local (compatible con Express 5)
+app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 

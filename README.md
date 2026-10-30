@@ -77,6 +77,7 @@ El proyecto fue desarrollado aplicando estrictamente el principio **100% agénti
 | **04** | Accesibilidad y diseño *Desktop-First*. | Garantizar navegación sin desbordes y componentes colapsables navegables por teclado. | Implementación de etiquetas semánticas `<details>` y `<summary>` con foco visible y estilos de contraste optimizados. |
 | **05** | Servidor local y preparación para despliegue. | Transición de servidor local a entorno estándar Node.js/Express. | Configuración de `server.js` y `package.json` para ejecución local y compatibilidad directa con Vercel. |
 | **06** | Integración de IA Real (Gemini 3.8 Flash) y Datos de Clubes. | Trascender la simulación abstracta para consultar un agente de IA real sobre un catálogo de partidos. | Implementación del SDK `@google/genai` (Gemini 3.8 Flash), dataset de clubes en CABA (`data/partidos.json`) y consola de interacción con razonamiento agéntico en lenguaje natural. |
+| **07** | Flexibilidad en Búsqueda Asistida y Manual (*Nivel Propone*). | La lógica proposicional rígida bloqueaba la consulta si el usuario no completaba los tres campos. | Evolución agéntica: tanto en modo manual como asistido, el sistema procesa los campos activos y omite los no definidos, permitiendo que Gemini asista proactivamente recomendando opciones para las dimensiones abiertas sin frustrar la experiencia. |
 
 ---
 

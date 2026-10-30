@@ -17,10 +17,54 @@ document.addEventListener('DOMContentLoaded', () => {
   const simMensajeAdicional = document.getElementById('sim-mensaje-adicional');
   const simApiKey = document.getElementById('sim-api-key');
   const btnEvaluar1 = document.getElementById('btn-evaluar-1');
+  const btnCancelar1 = document.getElementById('btn-cancelar-1');
   const outSim1 = document.getElementById('resultado-sim-1');
 
-  async function consultarAgente() {
+  let controladorAborto = null;
+
+  function actualizarBoton() {
+    if (!btnEvaluar1 || !simAsistida) return;
+    if (simAsistida.checked) {
+      btnEvaluar1.innerHTML = '<span class="btn-icon">🤖</span> Consultar al Agente Inteligente';
+    } else {
+      btnEvaluar1.innerHTML = '<span class="btn-icon">🔍</span> Buscar en Catálogo (Modo Manual)';
+    }
+  }
+
+  if (simAsistida) {
+    simAsistida.addEventListener('change', actualizarBoton);
+  }
+
+  if (btnCancelar1) {
+    btnCancelar1.addEventListener('click', () => {
+      if (controladorAborto) {
+        controladorAborto.abort();
+        controladorAborto = null;
+      }
+      btnCancelar1.style.display = 'none';
+      btnEvaluar1.disabled = false;
+      actualizarBoton();
+      outSim1.style.borderLeftColor = '#f59e0b';
+      outSim1.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem;">
+          <span class="output-label" style="color:#f59e0b;">Consulta Cancelada</span>
+          <span class="badge" style="background:#475569; color:#fff;">Detenido</span>
+        </div>
+        <p class="output-text">⏹️ <strong>Consulta cancelada por el usuario.</strong> Puedes modificar los filtros e iniciar una nueva búsqueda cuando lo desees.</p>
+      `;
+    });
+  }
+
+  async function consultarAgente(opciones = {}) {
     if (!btnEvaluar1 || !outSim1) return;
+
+    const { radioAmpliado = false } = opciones;
+
+    // Si había una petición previa en curso, cancelarla antes de iniciar la nueva
+    if (controladorAborto) {
+      controladorAborto.abort();
+    }
+    controladorAborto = new AbortController();
 
     const asistidaActiva = simAsistida.checked;
     const zona = simZona.value.trim();
@@ -29,14 +73,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const mensajeUsuario = simMensajeAdicional ? simMensajeAdicional.value.trim() : '';
     const apiKey = simApiKey ? simApiKey.value.trim() : '';
 
-    // Estado visual de carga
+    // Estado visual de carga y mostrar botón de cancelación
     btnEvaluar1.disabled = true;
-    btnEvaluar1.innerHTML = '<span class="spinner-inline"></span> Razonando con el Agente...';
+    if (btnCancelar1) {
+      btnCancelar1.style.display = 'inline-flex';
+    }
+
+    let textoCarga = asistidaActiva ? 'Razonando con el Agente...' : 'Filtrando catálogo manual...';
+    if (radioAmpliado) {
+      textoCarga = 'Ampliando radio de búsqueda (+5 km)...';
+    }
+
+    btnEvaluar1.innerHTML = `<span class="spinner-inline"></span> ${textoCarga}`;
     outSim1.style.borderLeftColor = '#3b82f6';
     outSim1.innerHTML = `
       <div style="display: flex; align-items: center; gap: 0.75rem; color: #93c5fd;">
         <span class="spinner-inline"></span>
-        <p class="output-text" style="margin: 0;"><strong>El agente está evaluando tus criterios...</strong> Analizando disponibilidad en clubes de CABA y aplicando reglas R1/R2.</p>
+        <p class="output-text" style="margin: 0;"><strong>${radioAmpliado ? 'Ampliando búsqueda a zonas linderas...' : (asistidaActiva ? 'El agente está evaluando tus criterios...' : 'Buscando en la base de datos...')}</strong> ${radioAmpliado ? 'Explorando clubes compatibles a un radio de +5 km con tu confirmación.' : (asistidaActiva ? 'Analizando disponibilidad en clubes de CABA y aplicando reglas R1/R2.' : 'Filtrando los registros que coinciden con los campos especificados.')}</p>
       </div>
     `;
 
@@ -44,13 +97,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const response = await fetch('/api/agente-buscar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        signal: controladorAborto.signal,
         body: JSON.stringify({
           asistidaActiva,
           zona,
           nivel,
           horario,
           mensajeUsuario,
-          apiKey
+          apiKey,
+          radioAmpliado
         })
       });
 
@@ -63,6 +118,11 @@ document.addEventListener('DOMContentLoaded', () => {
       renderRespuestaAgente(data);
 
     } catch (err) {
+      if (err.name === 'AbortError') {
+        // Cancelado intencionalmente por el usuario, no mostrar error
+        return;
+      }
+
       console.error('Error al consultar el agente:', err);
       outSim1.style.borderLeftColor = '#ef4444';
       outSim1.innerHTML = `
@@ -73,8 +133,12 @@ document.addEventListener('DOMContentLoaded', () => {
         <p class="output-text">No se pudo contactar con el servicio del agente. Verifica que el servidor Node.js esté corriendo (<code>npm start</code>).</p>
       `;
     } finally {
+      if (btnCancelar1) {
+        btnCancelar1.style.display = 'none';
+      }
       btnEvaluar1.disabled = false;
-      btnEvaluar1.innerHTML = '<span class="btn-icon">🤖</span> Consultar al Agente Inteligente';
+      actualizarBoton();
+      controladorAborto = null;
     }
   }
 
@@ -106,10 +170,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Renderizar tarjetas de partidos de básquet reales
     let partidosHtml = '';
     if (data.partidos && data.partidos.length > 0) {
+      const tituloResultados = data.estado === 'manual'
+        ? (data.criterios_especificados && data.criterios_especificados.length > 0
+            ? 'Partidos Filtrados Manualmente'
+            : 'Catálogo Completo Disponible (Búsqueda Manual)')
+        : 'Partidos Compatibles Encontrados';
+
       partidosHtml = `
         <div class="matches-results" style="margin-top: 1.25rem;">
           <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.75rem; color: #f8fafc;">
-            🏀 ${data.estado === 'manual' ? 'Catálogo Completo Disponible (Búsqueda Manual):' : 'Partidos Compatibles Encontrados:'}
+            🏀 ${tituloResultados} (${data.partidos.length}):
           </h4>
           <div class="matches-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.85rem;">
             ${data.partidos.map(p => `
@@ -126,15 +196,43 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
       `;
+    } else if (data.estado === 'manual') {
+      partidosHtml = `
+        <div style="margin-top: 1.25rem; padding: 1rem; background: #1e293b; border: 1px solid #334155; border-radius: 8px; color: #cbd5e1;">
+          <p style="margin: 0; font-size: 0.9rem;">
+            🔍 <strong>Sin coincidencias en búsqueda manual:</strong> Ningún partido del catálogo cumple con los campos especificados. Puedes modificar o limpiar algún filtro para ver más opciones.
+          </p>
+        </div>
+      `;
     }
 
-    // Bloque del nivel Propone
+    // Bloque del nivel Propone con botones interactivos de confirmación
     let propuestaHtml = '';
     if (data.propuesta_proactiva) {
+      let botonesPropuesta = '';
+      if (data.puede_ampliar_radio || data.puede_activar_vigilante) {
+        botonesPropuesta = `
+          <div class="propuesta-actions" style="margin-top: 0.85rem; display: flex; gap: 0.6rem; flex-wrap: wrap;">
+            ${data.puede_ampliar_radio ? `
+              <button type="button" id="btn-aceptar-radio" class="btn btn-sm btn-primary" style="font-size: 0.82rem; padding: 0.45rem 0.9rem; cursor: pointer;">
+                📍 Aceptar: Ampliar Radio (+5 km)
+              </button>
+            ` : ''}
+            ${data.puede_activar_vigilante ? `
+              <button type="button" id="btn-activar-vigilante" class="btn btn-sm" style="font-size: 0.82rem; padding: 0.45rem 0.9rem; background: #1e293b; border: 1px solid #f36b21; color: #f36b21; cursor: pointer;">
+                🔔 Activar Vigilante de Vacantes
+              </button>
+            ` : ''}
+          </div>
+          <div id="contenedor-vigilante-confirmacion"></div>
+        `;
+      }
+
       propuestaHtml = `
         <div style="margin-top: 1rem; padding: 0.85rem; background: rgba(243, 107, 33, 0.08); border: 1px dashed #f36b21; border-radius: 8px;">
           <strong style="color: #f36b21; font-size: 0.85rem; display: block; margin-bottom: 0.25rem;">★ Propuesta de Valor Agéntica (Nivel Propone):</strong>
           <p style="font-size: 0.88rem; margin: 0; color: #f1f5f9;">${data.propuesta_proactiva}</p>
+          ${botonesPropuesta}
         </div>
       `;
     }
@@ -148,12 +246,17 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
     }
 
+    const badgeRadioAmpliado = data.criterio_ampliado
+      ? '<span class="badge" style="background:#0284c7; color:#fff;">📍 Radio +5 km Aplicado</span>'
+      : '';
+
     outSim1.style.borderLeftColor = estadoColor;
     outSim1.innerHTML = `
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; flex-wrap:wrap; gap:0.5rem;">
         <span class="output-label" style="color:${estadoColor}; margin-bottom:0;">${data.titulo}</span>
         <div style="display:flex; gap:0.4rem; align-items:center; flex-wrap:wrap;">
           ${reglaBadge}
+          ${badgeRadioAmpliado}
           ${iaBadge}
         </div>
       </div>
@@ -166,10 +269,37 @@ document.addEventListener('DOMContentLoaded', () => {
       ${partidosHtml}
       ${avisoKeyHtml}
     `;
+
+    // Vincular interactividad a los botones de la propuesta de valor
+    const btnAceptarRadio = document.getElementById('btn-aceptar-radio');
+    if (btnAceptarRadio) {
+      btnAceptarRadio.addEventListener('click', () => {
+        consultarAgente({ radioAmpliado: true });
+      });
+    }
+
+    const btnActivarVigilante = document.getElementById('btn-activar-vigilante');
+    if (btnActivarVigilante) {
+      btnActivarVigilante.addEventListener('click', () => {
+        btnActivarVigilante.disabled = true;
+        btnActivarVigilante.style.opacity = '0.6';
+        const contenedor = document.getElementById('contenedor-vigilante-confirmacion');
+        if (contenedor) {
+          const zonaActual = simZona ? simZona.value : '';
+          const nivelActual = simNivel ? simNivel.value : '';
+          contenedor.innerHTML = `
+            <div style="margin-top: 0.75rem; padding: 0.75rem 1rem; background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; border-radius: 8px; color: #a7f3d0; font-size: 0.85rem;">
+              🔔 <strong>¡Vigilante de Vacantes Activado con Éxito!</strong><br>
+              El agente ha registrado tu alerta proactiva para <em>${zonaActual || 'todas las zonas'}</em> (${nivelActual || 'cualquier nivel'}). Te enviaremos una notificación instantánea apenas un jugador cancele su cupo en estos clubes.
+            </div>
+          `;
+        }
+      });
+    }
   }
 
   if (btnEvaluar1) {
-    btnEvaluar1.addEventListener('click', consultarAgente);
+    btnEvaluar1.addEventListener('click', () => consultarAgente({ radioAmpliado: false }));
   }
 
   // ========================================================================
@@ -197,6 +327,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Ejecutar primera consulta automática al iniciar para dar feedback inmediato
-  consultarAgente();
+  // Inicializar estado del botón según el switch (sin disparar la consulta a la IA)
+  actualizarBoton();
 });

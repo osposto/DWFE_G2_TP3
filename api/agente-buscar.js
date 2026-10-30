@@ -1,77 +1,67 @@
 const { GoogleGenAI } = require('@google/genai');
 
-// Catálogo de partidos embebido y con respaldo de archivo
-let partidosData = [];
-try {
-  partidosData = require('../data/partidos.json');
-} catch (e) {
-  partidosData = [
-    {
-      id: "PART-001",
-      club: "Club Gimnasia y Esgrima de Buenos Aires (GEBA)",
-      direccion: "Av. del Libertador 2050, Palermo",
-      zona: "Palermo (CABA)",
-      dia: "Martes",
-      horario: "19:00 a 21:00 hs",
-      nivel: "Intermedio",
-      cupos_totales: 10,
-      cupos_libres: 3,
-      tipo: "Recreativo 5x5",
-      arancel: 3500
-    },
-    {
-      id: "PART-002",
-      club: "Club Ferro Carril Oeste",
-      direccion: "Federico García Lorca 350, Caballito",
-      zona: "Caballito (CABA)",
-      dia: "Jueves",
-      horario: "21:00 a 23:00 hs",
-      nivel: "Avanzado",
-      cupos_totales: 10,
-      cupos_libres: 2,
-      tipo: "Competitivo 5x5",
-      arancel: 4000
-    },
-    {
-      id: "PART-003",
-      club: "Club Harrods Gath & Chaves",
-      direccion: "Virrey del Pino 1480, Belgrano",
-      zona: "Belgrano (CABA)",
-      dia: "Sábado",
-      horario: "Sábados por la mañana",
-      nivel: "Inicial / Recreativo",
-      cupos_totales: 12,
-      cupos_libres: 5,
-      tipo: "Entrenamiento + 5x5",
-      arancel: 3000
-    },
-    {
-      id: "PART-004",
-      club: "Club Náutico Hacoaj (Sede Almagro)",
-      direccion: "Estado de Israel 4156, Almagro (cercano a Caballito)",
-      zona: "Caballito (CABA)",
-      dia: "Miércoles",
-      horario: "19:00 a 21:00 hs",
-      nivel: "Intermedio",
-      cupos_totales: 10,
-      cupos_libres: 1,
-      tipo: "Recreativo 5x5",
-      arancel: 3800
-    },
-    {
-      id: "PART-005",
-      club: "Club Ciudad de Buenos Aires",
-      direccion: "Av. del Libertador 7501, Núñez (cercano a Belgrano)",
-      zona: "Belgrano (CABA)",
-      dia: "Lunes",
-      horario: "21:00 a 23:00 hs",
-      nivel: "Intermedio",
-      cupos_totales: 10,
-      cupos_libres: 4,
-      tipo: "Amistoso 5x5",
-      arancel: 3500
+// Catálogo único de partidos (fuente de verdad oficial)
+const partidosData = require('../data/partidos.json');
+
+// Helper para verificar si un campo fue realmente especificado (no vacío y no "sin completar")
+function esCampoEspecificado(val) {
+  if (!val) return false;
+  const s = String(val).trim().toLowerCase();
+  return s !== '' && !s.includes('sin completar') && !s.includes('--');
+}
+
+// Funciones auxiliares de coincidencia flexible para búsqueda manual y asistida
+function coincideZona(pZona, fZona) {
+  if (!esCampoEspecificado(fZona)) return true;
+  const f = fZona.toLowerCase().trim();
+  const p = (pZona || '').toLowerCase().trim();
+  if (p === f) return true;
+  if (f.includes('palermo') && p.includes('palermo')) return true;
+  if (f.includes('caballito') && p.includes('caballito')) return true;
+  if (f.includes('belgrano') && p.includes('belgrano')) return true;
+  return p.includes(f) || f.includes(p);
+}
+
+// Mapa de zonas linderas (+5 km) en CABA
+const ZONAS_CERCANAS = {
+  'palermo': ['palermo', 'belgrano', 'caballito', 'almagro', 'recoleta', 'chacarita', 'nuñez'],
+  'caballito': ['caballito', 'almagro', 'palermo', 'flores', 'villa crespo', 'parque chacabuco'],
+  'belgrano': ['belgrano', 'nuñez', 'nunez', 'palermo', 'colegiales', 'saavedra']
+};
+
+function coincideZonaAmpliada(pZona, fZona) {
+  if (!esCampoEspecificado(fZona)) return true;
+  const f = fZona.toLowerCase().trim();
+  const p = (pZona || '').toLowerCase().trim();
+  for (const key of Object.keys(ZONAS_CERCANAS)) {
+    if (f.includes(key)) {
+      const cercanas = ZONAS_CERCANAS[key];
+      if (cercanas.some(z => p.includes(z))) return true;
     }
-  ];
+  }
+  return coincideZona(pZona, fZona);
+}
+
+function coincideNivel(pNivel, fNivel) {
+  if (!esCampoEspecificado(fNivel)) return true;
+  const f = fNivel.toLowerCase().trim();
+  const p = (pNivel || '').toLowerCase().trim();
+  if (p === f) return true;
+  if (f.includes('intermedio') && p.includes('intermedio')) return true;
+  if (f.includes('avanzado') && p.includes('avanzado')) return true;
+  if ((f.includes('inicial') || f.includes('recreativo')) && (p.includes('inicial') || p.includes('recreativo'))) return true;
+  return p.includes(f) || f.includes(p);
+}
+
+function coincideHorario(pHorario, fHorario) {
+  if (!esCampoEspecificado(fHorario)) return true;
+  const f = fHorario.toLowerCase().trim();
+  const p = (pHorario || '').toLowerCase().trim();
+  if (p === f) return true;
+  if (f.startsWith('19') && p.startsWith('19')) return true;
+  if (f.startsWith('21') && p.startsWith('21')) return true;
+  if (f.includes('sábado') && p.includes('sábado')) return true;
+  return p.includes(f) || f.includes(p);
 }
 
 module.exports = async function handler(req, res) {
@@ -106,90 +96,131 @@ module.exports = async function handler(req, res) {
       horario = '',
       nivel = '',
       mensajeUsuario = '',
-      apiKey = ''
+      apiKey = '',
+      radioAmpliado = false
     } = body;
 
     const partidos = partidosData || [];
 
     // 1. EVALUAR REGLA R2: Búsqueda asistida desactivada (modo manual)
     if (!asistidaActiva) {
+      const filtrosAplicados = [];
+      if (esCampoEspecificado(zona)) filtrosAplicados.push(`Zona: "${zona}"`);
+      if (esCampoEspecificado(nivel)) filtrosAplicados.push(`Nivel: "${nivel}"`);
+      if (esCampoEspecificado(horario)) filtrosAplicados.push(`Horario: "${horario}"`);
+
+      // Filtrar la base de datos considerando ÚNICAMENTE los campos especificados (que NO sean "Sin completar")
+      const partidosFiltrados = partidos.filter(p => {
+        let cumple = true;
+        if (esCampoEspecificado(zona)) {
+          cumple = cumple && coincideZona(p.zona, zona);
+        }
+        if (esCampoEspecificado(nivel)) {
+          cumple = cumple && coincideNivel(p.nivel, nivel);
+        }
+        if (esCampoEspecificado(horario)) {
+          cumple = cumple && coincideHorario(p.horario, horario);
+        }
+        return cumple;
+      });
+
+      const detalleFiltros = filtrosAplicados.length > 0
+        ? `campos especificados (${filtrosAplicados.join(', ')})`
+        : 'sin filtros específicos (catálogo completo)';
+
       return res.status(200).json({
         ok: true,
         regla: 'R2',
         estado: 'manual',
-        titulo: 'Modo Manual Activo (Regla R2)',
-        razonamiento_agente: 'El usuario desactivó la búsqueda asistida. En cumplimiento estricto de la regla R2, el agente de software suspende cualquier recomendación automática en segundo plano y mantiene accesible la totalidad del catálogo para filtrado tradicional sin intervención algorítmica.',
-        partidos: partidos,
+        titulo: 'Búsqueda Manual (Regla R2)',
+        razonamiento_agente: `Búsqueda asistida desactivada. Se realizó una consulta manual directa sobre la base de datos extrayendo únicamente los registros que coinciden con los ${detalleFiltros}. Los campos no especificados o en "-- Sin completar --" fueron omitidos del filtro.`,
+        mensaje_usuario: partidosFiltrados.length > 0
+          ? `Se encontraron ${partidosFiltrados.length} partido(s) que coinciden con los campos especificados.`
+          : `No se encontraron partidos en el catálogo que coincidan con la combinación manual de filtros seleccionada.`,
+        criterios_especificados: filtrosAplicados,
+        partidos: partidosFiltrados,
         modo_ia: false
       });
     }
 
-    // 2. EVALUAR CAMPOS OBLIGATORIOS PARA R1
-    if (!zona.trim() || !horario.trim() || !nivel.trim()) {
-      const faltantes = [];
-      if (!zona.trim()) faltantes.push('Zona geográfica');
-      if (!nivel.trim()) faltantes.push('Nivel de juego');
-      if (!horario.trim()) faltantes.push('Franja horaria');
+    // 2. BÚSQUEDA ASISTIDA (Regla R1 ampliada con Nivel Propone)
+    const filtrosActivos = [];
+    if (esCampoEspecificado(zona)) filtrosActivos.push(`Zona: "${zona}"`);
+    if (esCampoEspecificado(nivel)) filtrosActivos.push(`Nivel: "${nivel}"`);
+    if (esCampoEspecificado(horario)) filtrosActivos.push(`Horario: "${horario}"`);
 
-      return res.status(200).json({
-        ok: true,
-        regla: 'Condición Incompleta',
-        estado: 'incompleto',
-        titulo: 'Parámetros Incompletos',
-        razonamiento_agente: `Para activar la búsqueda asistida (R1) es requisito completar zona, horario y nivel. Actualmente falta: ${faltantes.join(', ')}.`,
-        partidos: [],
-        modo_ia: false
-      });
-    }
-
-    // 3. BUSCAR COINCIDENCIAS EN EL CATÁLOGO
+    // Filtrar por los campos provistos (usando zona ampliada si el usuario aceptó la propuesta del nivel Propone)
     const coincidencias = partidos.filter(p => {
-      const matchZona = p.zona.toLowerCase().includes(zona.toLowerCase().split(' ')[0]);
-      const matchNivel = p.nivel.toLowerCase().includes(nivel.toLowerCase().split(' ')[0]);
-      const matchHorario = p.horario.toLowerCase().includes(horario.toLowerCase().slice(0, 5));
-      return matchZona && matchNivel && matchHorario;
+      let cumple = true;
+      if (esCampoEspecificado(zona)) {
+        cumple = cumple && (radioAmpliado ? coincideZonaAmpliada(p.zona, zona) : coincideZona(p.zona, zona));
+      }
+      if (esCampoEspecificado(nivel)) cumple = cumple && coincideNivel(p.nivel, nivel);
+      if (esCampoEspecificado(horario)) cumple = cumple && coincideHorario(p.horario, horario);
+      return cumple;
     });
+
+    const camposOmitidos = [];
+    if (!esCampoEspecificado(zona)) camposOmitidos.push('zona geográfica');
+    if (!esCampoEspecificado(nivel)) camposOmitidos.push('nivel deportivo');
+    if (!esCampoEspecificado(horario)) camposOmitidos.push('franja horaria');
 
     const activeApiKey = (apiKey && apiKey.trim()) || process.env.GEMINI_API_KEY;
 
-    // 4. SI HAY API KEY, USAR GEMINI 3.8 FLASH
+    let avisoFalloGemini = null;
+
+    // 3. SI HAY API KEY, USAR GEMINI 3.8 FLASH
     if (activeApiKey && activeApiKey.trim() !== '') {
       try {
         const aiClient = new GoogleGenAI({ apiKey: activeApiKey.trim() });
         
         const systemPrompt = `
 Eres el agente inteligente de emparejamiento de "FUL Y VALE APP", una startup deportiva desarrollada en el marco del IFTS 29 y articulada con el IFTS 16.
-Tu función es aplicar con precisión las reglas lógicas:
-- Regla R1: Si el usuario completó zona, horario y nivel, buscar partidos compatibles; mostrar coincidencias si existen y, si no existen, informar que no encontró resultados.
-- Nivel Propone institucional: Si no existen coincidencias, no te limites a un mensaje pasivo. Propón proactivamente: 1) ampliar la tolerancia de búsqueda a +5 km indicando clubes cercanos sugeridos, o 2) activar un "Vigilante Inteligente de Vacantes" para avisarle en tiempo real si alguien se da de baja.
+Tu función es aplicar con precisión y criterio las reglas del negocio:
+- Regla R1: Si el usuario realiza una búsqueda asistida, evalúa los partidos compatibles con los criterios provistos. Muestra las coincidencias si existen y, si no existen, informa que no encontró resultados.
+- Nivel Propone institucional (Flexibilidad y Proactividad):
+  * Si el usuario dejó campos en "Sin completar" (${camposOmitidos.length > 0 ? camposOmitidos.join(', ') : 'ninguno, completó los 3'}), no lo bloquees: busca con los campos provistos y asiste proactivamente recomendando opciones o sugiriendo qué tener en cuenta para las dimensiones no especificadas.
+  * Si no existen coincidencias, no te limites a un mensaje pasivo. Propón proactivamente: 1) ampliar la tolerancia de búsqueda a +5 km indicando clubes cercanos sugeridos, o 2) activar un "Vigilante Inteligente de Vacantes" para avisarle en tiempo real si alguien se da de baja.
 
 Datos de la consulta del jugador:
-- Zona solicitada: ${zona}
-- Nivel de juego: ${nivel}
-- Horario solicitado: ${horario}
-- Comentario adicional: ${mensajeUsuario || 'Ninguno'}
-- Coincidencias exactas halladas en el catálogo interno: ${coincidencias.length} partido(s).
-${coincidencias.length > 0 ? `Partidos hallados: ${JSON.stringify(coincidencias)}` : 'No hay partidos exactos.'}
+- Zona solicitada: ${esCampoEspecificado(zona) ? zona : 'Sin especificar (abierto a cualquier zona)'}
+- Nivel de juego: ${esCampoEspecificado(nivel) ? nivel : 'Sin especificar (abierto a cualquier nivel)'}
+- Horario solicitado: ${esCampoEspecificado(horario) ? horario : 'Sin especificar (abierto a cualquier horario)'}
+- Comentario adicional del jugador: ${mensajeUsuario || 'Ninguno'}
+- Coincidencias halladas en el catálogo interno para los criterios provistos: ${coincidencias.length} partido(s).
+${coincidencias.length > 0 ? `Partidos hallados: ${JSON.stringify(coincidencias)}` : 'No hay partidos exactos para esa combinación.'}
 Catálogo completo de referencia: ${JSON.stringify(partidos)}
 
 Responde SIEMPRE en formato JSON válido con la siguiente estructura:
 {
   "titulo": "Título conciso y motivador de la respuesta",
-  "razonamiento_agente": "Explicación paso a paso de cómo el agente analizó los filtros y qué regla aplicó",
+  "razonamiento_agente": "Explicación paso a paso de cómo el agente analizó los filtros, qué criterios aplicó y cómo asistió en los campos no especificados",
   "mensaje_para_usuario": "Mensaje personalizado y claro dirigido al jugador con tono deportivo y profesional",
-  "propuesta_proactiva": "Propuesta de valor si no hubo coincidencias (o sugerencia adicional si hubo)",
+  "propuesta_proactiva": "Propuesta de valor si no hubo coincidencias (o sugerencia adicional orientadora sobre campos no definidos)",
   "partidos_destacados": ["lista de nombres de clubes o IDs recomendados"]
 }
 `;
 
-        const response = await aiClient.models.generateContent({
+        const aiPromise = aiClient.models.generateContent({
           model: 'gemini-3.8-flash',
           contents: 'Ejecuta el análisis agéntico para este jugador y devuelve únicamente el objeto JSON especificado.',
           config: {
             systemInstruction: systemPrompt,
-            responseMimeType: 'application/json'
+            responseMimeType: 'application/json',
+            thinkingConfig: {
+              thinkingBudget: 0 // Desactiva tiempo de pensamiento extendido para respuesta rápida
+            }
           }
         });
+
+        // Timeout preventivo de 6 segundos para no quedar colgado ante saturación temporal de Google
+        let timeoutId;
+        const timeoutPromise = new Promise((_, reject) => {
+          timeoutId = setTimeout(() => reject(new Error('TIMEOUT_DEMANDA_GEMINI')), 6000);
+        });
+
+        const response = await Promise.race([aiPromise, timeoutPromise]);
+        clearTimeout(timeoutId);
 
         const rawText = response.text || '';
         let aiParsed = {};
@@ -208,33 +239,63 @@ Responde SIEMPRE en formato JSON válido con la siguiente estructura:
           ok: true,
           regla: 'R1',
           estado: coincidencias.length > 0 ? 'exito' : 'sin_resultados',
-          titulo: aiParsed.titulo || (coincidencias.length > 0 ? '¡Coincidencias Halladas!' : 'Sin Resultados Exactos'),
+          titulo: aiParsed.titulo || (coincidencias.length > 0 ? (radioAmpliado ? '¡Coincidencias con Radio Ampliado (+5 km)!' : '¡Coincidencias Halladas!') : 'Sin Resultados Exactos'),
           razonamiento_agente: aiParsed.razonamiento_agente || 'Análisis agéntico ejecutado con Gemini 3.8 Flash.',
           mensaje_usuario: aiParsed.mensaje_para_usuario || '',
-          propuesta_proactiva: aiParsed.propuesta_proactiva || '',
+          propuesta_proactiva: aiParsed.propuesta_proactiva || (coincidencias.length === 0 ? '¿Deseas ampliar el radio de búsqueda a +5 km hacia zonas linderas o activar el «Vigilante Inteligente de Vacantes»?' : ''),
+          puede_ampliar_radio: coincidencias.length === 0 && !radioAmpliado,
+          puede_activar_vigilante: coincidencias.length === 0,
+          criterio_ampliado: radioAmpliado,
           partidos: coincidencias,
           modo_ia: true,
           modelo: 'Gemini 3.8 Flash'
         });
 
       } catch (geminiError) {
-        console.warn('Fallo en llamada a Gemini API, usando fallback:', geminiError.message);
+        console.warn('Fallo o demora en llamada a Gemini API, pasando a resolución determinista:', geminiError.message);
+        if (geminiError.message.includes('503') || geminiError.message.includes('high demand')) {
+          avisoFalloGemini = 'Google reportó alta demanda temporal en sus servidores (503). El agente activó la resolución local de respaldo de inmediato sin demoras.';
+        } else if (geminiError.message.includes('TIMEOUT')) {
+          avisoFalloGemini = 'La respuesta de Google demoró más de 6 segundos. El agente activó la resolución local de respaldo para no hacerte esperar.';
+        } else {
+          avisoFalloGemini = 'Servicio de IA temporalmente inaccesible. Se aplicó la resolución agéntica determinista de respaldo.';
+        }
       }
     }
 
-    // 5. RESOLUCIÓN DETERMINISTA (sin API Key o fallback)
+    // 4. RESOLUCIÓN DETERMINISTA (sin API Key o fallback)
     if (coincidencias.length > 0) {
+      const detalle = filtrosActivos.length > 0
+        ? `los criterios especificados (${filtrosActivos.join(', ')})`
+        : 'el catálogo general abierto';
+      const avisoOmitidos = camposOmitidos.length > 0
+        ? ` Al no restringir por ${camposOmitidos.join(' ni ')}, el agente te ofrece opciones variadas para que elijas libremente.`
+        : '';
+
+      const tituloDeterm = radioAmpliado
+        ? '¡Coincidencias Halladas con Radio Ampliado (+5 km)!'
+        : '¡Coincidencias Encontradas! (Búsqueda Asistida R1)';
+
+      const razonamientoDeterm = radioAmpliado
+        ? `El usuario confirmó expresamente la propuesta del nivel Propone de ampliar el radio a +5 km. El agente exploró zonas linderas y halló ${coincidencias.length} partido(s) compatible(s) con su nivel de juego.`
+        : `El agente asistido evaluó ${detalle}. Encontró ${coincidencias.length} partido(s) compatible(s) con vacantes libres.${avisoOmitidos}`;
+
       return res.status(200).json({
         ok: true,
         regla: 'R1',
         estado: 'exito',
-        titulo: '¡Coincidencias Encontradas! (Regla R1)',
-        razonamiento_agente: `El agente procesó la tupla (${zona}, ${horario}, ${nivel}). Encontró ${coincidencias.length} partido(s) disponible(s) con vacantes libres y compatibilidad de nivel.`,
-        mensaje_usuario: `¡Genial! Hemos encontrado partidos para vos en ${zona}. Cumplen con tu nivel ${nivel} en el horario de ${horario}.`,
-        propuesta_proactiva: 'Podés solicitar tu vacante directamente.',
+        titulo: tituloDeterm,
+        razonamiento_agente: razonamientoDeterm,
+        mensaje_usuario: radioAmpliado
+          ? `¡Excelente! Al ampliar el radio a +5 km encontramos partidos en clubes cercanos compatibles con lo que buscabas.`
+          : `¡Genial! Hemos encontrado partidos para vos con los filtros seleccionados.${avisoOmitidos}`,
+        propuesta_proactiva: radioAmpliado
+          ? 'Criterio ampliado aplicado exitosamente con tu confirmación.'
+          : (camposOmitidos.length > 0 ? `★ Nivel Propone: Puedes afinar seleccionando ${camposOmitidos.join(' o ')} cuando desees acotar más la búsqueda.` : 'Podés solicitar tu vacante directamente.'),
+        criterio_ampliado: radioAmpliado,
         partidos: coincidencias,
         modo_ia: false,
-        aviso_config: !activeApiKey ? 'Para habilitar explicaciones generativas en vivo, configura GEMINI_API_KEY en Vercel o en tu archivo .env.' : null
+        aviso_config: avisoFalloGemini || (!activeApiKey ? 'Para habilitar explicaciones generativas en vivo, configura GEMINI_API_KEY en Vercel o en tu archivo .env.' : null)
       });
     } else {
       return res.status(200).json({
@@ -242,12 +303,14 @@ Responde SIEMPRE en formato JSON válido con la siguiente estructura:
         regla: 'R1',
         estado: 'sin_resultados',
         titulo: 'Sin Coincidencias Inmediatas (Regla R1 · Nivel Propone)',
-        razonamiento_agente: `El agente verificó el catálogo y constató cero partidos con coincidencia exacta para ${zona} en el horario de ${horario} con nivel ${nivel}. Aplica la consecuencia formal de R1 informando la ausencia de resultados.`,
+        razonamiento_agente: `El agente verificó el catálogo y constató cero partidos compatibles para la combinación de filtros seleccionada (${filtrosActivos.join(', ')}). Aplica la consecuencia formal de R1 informando la ausencia de resultados.`,
         mensaje_usuario: `No encontramos partidos con esos criterios exactos en este momento.`,
-        propuesta_proactiva: `★ Nivel Propone: ¿Deseas ampliar el radio de búsqueda a +5 km (incluyendo zonas linderas) o activar el «Vigilante Inteligente de Vacantes» para que te notifiquemos de inmediato si un jugador libera su cupo?`,
+        propuesta_proactiva: `¿Deseas ampliar el radio de búsqueda a +5 km (incluyendo zonas linderas) o activar el «Vigilante Inteligente de Vacantes» para que te notifiquemos de inmediato si un jugador libera su cupo?`,
+        puede_ampliar_radio: true,
+        puede_activar_vigilante: true,
         partidos: [],
         modo_ia: false,
-        aviso_config: !activeApiKey ? 'Para habilitar explicaciones generativas en vivo, configura GEMINI_API_KEY en Vercel o en tu archivo .env.' : null
+        aviso_config: avisoFalloGemini || (!activeApiKey ? 'Para habilitar explicaciones generativas en vivo, configura GEMINI_API_KEY en Vercel o en tu archivo .env.' : null)
       });
     }
 
