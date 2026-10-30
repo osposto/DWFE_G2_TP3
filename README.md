@@ -121,6 +121,6 @@ Para ejecutar y probar la landing page en un entorno local:
 
 ## 7. Enlaces del Proyecto
 
-* **Repositorio de código:** `[Pendiente de publicación]` *(Completar con URL de GitHub del grupo)*
-* **Landing publicada:** `[Pendiente de publicación]` *(Completar con URL pública de Vercel / GitHub Pages)*
+* **Repositorio de código:** https://github.com/osposto/DWFE_G2_TP3
+* **Landing publicada:** `[Pendiente de publicación en Vercel]` *(Completar tras conectar Vercel con el repositorio)*
 
