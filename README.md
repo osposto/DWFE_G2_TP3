@@ -31,6 +31,11 @@ Durante el desmonte de las sentencias, Adriana identificó que en la sentencia *
 ### Bloque Asignado
 * **Bloque 1 (`S05-A`) — Búsqueda asistida o manual** (Frases R1 y R2).
 
+### Origen del Catálogo de Partidos (`data/partidos.json`)
+El enunciado institucional del TP3 define con rigor las tres dimensiones de búsqueda requeridas (**Zona**, **Horario** y **Nivel**) y las sentencias de lógica proposicional (R1 y R2), pero no proporciona un listado estático ni una base de datos prefijada de partidos. 
+
+A fin de brindar un entorno de pruebas realista y comprobar fehacientemente la interacción agéntica en vivo, el equipo diseñó un catálogo con **clubes reales de básquet federado y recreativo de CABA** (GEBA en Palermo, Ferro Carril Oeste en Caballito, Harrods Gath & Chaves en Belgrano, Obras Sanitarias en Núñez, etc.). Este dataset permite validar tanto casos de coincidencia exacta como escenarios sin vacantes que activan la propuesta de valor institucional (*Nivel Propone*).
+
 ---
 
 ## 3. Desmonte Lógico de Sentencias
@@ -78,6 +83,7 @@ El proyecto fue desarrollado aplicando estrictamente el principio **100% agénti
 | **05** | Servidor local y preparación para despliegue. | Transición de servidor local a entorno estándar Node.js/Express. | Configuración de `server.js` y `package.json` para ejecución local y compatibilidad directa con Vercel. |
 | **06** | Integración de IA Real (Gemini 3.8 Flash) y Datos de Clubes. | Trascender la simulación abstracta para consultar un agente de IA real sobre un catálogo de partidos. | Implementación del SDK `@google/genai` (Gemini 3.8 Flash), dataset de clubes en CABA (`data/partidos.json`) y consola de interacción con razonamiento agéntico en lenguaje natural. |
 | **07** | Flexibilidad en Búsqueda Asistida y Manual (*Nivel Propone*). | La lógica proposicional rígida bloqueaba la consulta si el usuario no completaba los tres campos. | Evolución agéntica: tanto en modo manual como asistido, el sistema procesa los campos activos y omite los no definidos, permitiendo que Gemini asista proactivamente recomendando opciones para las dimensiones abiertas sin frustrar la experiencia. |
+| **08** | Propuesta de Valor Accionable y Control de Espera. | La sugerencia de ampliar radio (+5 km) o activar el vigilante era puramente informativa; ante demoras de red o alta demanda (503) faltaba control de cancelación. | Se agregaron botones de acción directa en la tarjeta de propuesta (`[📍 Aceptar: Ampliar Radio (+5 km)]` y `[🔔 Activar Vigilante de Vacantes]`), botón `[⏹️ Cancelar Consulta]` con `AbortController`, y timeout de resiliencia a 6 segundos. |
 
 ---
 
