@@ -76,6 +76,7 @@ El proyecto fue desarrollado aplicando estrictamente el principio **100% agénti
 | **03** | Modelado del diagrama de flujo. | La consigna exige representar fielmente condiciones `SÍ / NO` y casos límite. | Diagrama vectorial SVG nítido y responsivo con bifurcaciones para datos incompletos y derivación a sugerencias proactivas. |
 | **04** | Accesibilidad y diseño *Desktop-First*. | Garantizar navegación sin desbordes y componentes colapsables navegables por teclado. | Implementación de etiquetas semánticas `<details>` y `<summary>` con foco visible y estilos de contraste optimizados. |
 | **05** | Servidor local y preparación para despliegue. | Transición de servidor local a entorno estándar Node.js/Express. | Configuración de `server.js` y `package.json` para ejecución local y compatibilidad directa con Vercel. |
+| **06** | Integración de IA Real (Gemini 3.8 Flash) y Datos de Clubes. | Trascender la simulación abstracta para consultar un agente de IA real sobre un catálogo de partidos. | Implementación del SDK `@google/genai` (Gemini 3.8 Flash), dataset de clubes en CABA (`data/partidos.json`) y consola de interacción con razonamiento agéntico en lenguaje natural. |
 
 ---
 

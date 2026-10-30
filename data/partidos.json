@@ -1,0 +1,68 @@
+[
+  {
+    "id": "PART-001",
+    "club": "Club Gimnasia y Esgrima de Buenos Aires (GEBA)",
+    "direccion": "Av. del Libertador 2050, Palermo",
+    "zona": "Palermo (CABA)",
+    "dia": "Martes",
+    "horario": "19:00 a 21:00 hs",
+    "nivel": "Intermedio",
+    "cupos_totales": 10,
+    "cupos_libres": 3,
+    "tipo": "Recreativo 5x5",
+    "arancel": 3500
+  },
+  {
+    "id": "PART-002",
+    "club": "Club Ferro Carril Oeste",
+    "direccion": "Federico García Lorca 350, Caballito",
+    "zona": "Caballito (CABA)",
+    "dia": "Jueves",
+    "horario": "21:00 a 23:00 hs",
+    "nivel": "Avanzado",
+    "cupos_totales": 10,
+    "cupos_libres": 2,
+    "tipo": "Competitivo 5x5",
+    "arancel": 4000
+  },
+  {
+    "id": "PART-003",
+    "club": "Club Harrods Gath & Chaves",
+    "direccion": "Virrey del Pino 1480, Belgrano",
+    "zona": "Belgrano (CABA)",
+    "dia": "Sábado",
+    "horario": "Sábados por la mañana",
+    "nivel": "Inicial / Recreativo",
+    "cupos_totales": 12,
+    "cupos_libres": 5,
+    "tipo": "Entrenamiento + 5x5",
+    "arancel": 3000
+  },
+  {
+    "id": "PART-004",
+    "club": "Club Náutico Hacoaj (Sede Almagro)",
+    "direccion": "Estado de Israel 4156, Almagro (cercano a Caballito)",
+    "zona": "Caballito (CABA)",
+    "dia": "Miércoles",
+    "horario": "19:00 a 21:00 hs",
+    "nivel": "Intermedio",
+    "cupos_totales": 10,
+    "cupos_libres": 1,
+    "tipo": "Recreativo 5x5",
+    "arancel": 3800
+  },
+  {
+    "id": "PART-005",
+    "club": "Club Ciudad de Buenos Aires",
+    "direccion": "Av. del Libertador 7501, Núñez (cercano a Belgrano)",
+    "zona": "Belgrano (CABA)",
+    "dia": "Lunes",
+    "horario": "21:00 a 23:00 hs",
+    "nivel": "Intermedio",
+    "cupos_totales": 10,
+    "cupos_libres": 4,
+    "tipo": "Amistoso 5x5",
+    "arancel": 3500
+  }
+]
+

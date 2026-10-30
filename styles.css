@@ -889,17 +889,68 @@ body {
   justify-content: space-between;
 }
 
-.sim-badge {
-  display: inline-block;
-  align-self: flex-start;
+.sim-badge-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.badge-gemini {
   font-size: 0.75rem;
   font-weight: 700;
-  text-transform: uppercase;
-  color: var(--primary);
-  background-color: var(--primary-glow);
-  padding: 0.2rem 0.6rem;
+  color: #c7d2fe;
+  background: rgba(99, 102, 241, 0.2);
+  border: 1px solid rgba(129, 140, 248, 0.4);
+  padding: 0.2rem 0.65rem;
   border-radius: var(--radius-sm);
-  margin-bottom: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.key-config-details {
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 0.75rem;
+  background: rgba(17, 24, 39, 0.6);
+}
+
+.key-trigger {
+  padding: 0.4rem 0.2rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.key-hint {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+.key-hint code {
+  color: var(--primary);
+  background: var(--bg-main);
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+}
+
+.spinner-inline {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 0.8s linear infinite;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 .sim-title {

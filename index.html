@@ -333,21 +333,24 @@
       </div>
     </section>
 
-    <!-- SECCIÓN INTERACTIVA: Simulador de Flujo Agéntico (Nivel Propone) -->
+    <!-- SECCIÓN INTERACTIVA: Agente Inteligente en Vivo con Gemini -->
     <section id="simulador" class="section bg-alt">
       <div class="container">
         <div class="section-header text-center">
-          <span class="section-eyebrow">Recurso de Navegación y Explicación</span>
-          <h2 class="section-title">Simulador de Respuestas del Agente en Vivo</h2>
+          <span class="section-eyebrow">Agente Inteligente en Vivo · Gemini 3.8 Flash</span>
+          <h2 class="section-title">Consola de Interacción Agéntica</h2>
           <p class="section-subtitle">
-            Poné a prueba las reglas <strong>R1</strong> y <strong>R2</strong> en tiempo real para verificar cómo razona y decide el agente ante distintos estados del sistema y preferencias del usuario.
+            El agente evalúa zona, horario y nivel aplicando las reglas <strong>R1</strong> y <strong>R2</strong> sobre un catálogo real de canchas de básquet de CABA, con razonamiento en lenguaje natural impulsado por <strong>Gemini 3.8 Flash</strong>.
           </p>
         </div>
 
         <div class="simulator-single-wrap">
           <div class="sim-card">
-            <div class="sim-badge">Módulo de Búsqueda · S05-A</div>
-            <h3 class="sim-title">Consola de Evaluación de Búsqueda Asistida / Manual</h3>
+            <div class="sim-badge-wrap">
+              <span class="sim-badge">Módulo de Búsqueda · S05-A</span>
+              <span class="badge-gemini">✨ Impulsado por Gemini 3.8 Flash</span>
+            </div>
+            <h3 class="sim-title">Buscador Agéntico de Partidos de Básquet</h3>
             
             <form id="form-sim-1" class="sim-form" onsubmit="return false;">
               <div class="form-group">
@@ -389,18 +392,35 @@
               </div>
 
               <div class="form-group">
-                <label class="checkbox-label">
-                  <input type="checkbox" id="sim-hay-partidos" checked>
-                  <span>Existen partidos en base de datos para estos criterios exactos</span>
-                </label>
+                <label for="sim-mensaje-adicional">Preferencia adicional para el agente (opcional):</label>
+                <input type="text" id="sim-mensaje-adicional" class="form-control" placeholder="Ej: Prefiero cancha de parquet o que quede cerca del subte...">
               </div>
 
-              <button type="button" id="btn-evaluar-1" class="btn btn-primary btn-block">Evaluar Decisión del Agente</button>
+              <!-- Configuración opcional de Gemini API Key -->
+              <details class="accordion-item key-config-details">
+                <summary class="accordion-trigger key-trigger">
+                  <span class="trigger-title">⚙️ Configuración de API Key de Gemini (Opcional)</span>
+                  <span class="trigger-icon" aria-hidden="true">▾</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="key-hint">
+                    Puedes ingresar tu clave aquí para probarla en tu sesión o configurarla en el archivo <code>.env</code> del servidor. Si no ingresas una clave, el sistema responderá con la resolución lógica agéntica determinista.
+                  </p>
+                  <div class="form-group" style="margin-top: 0.5rem;">
+                    <label for="sim-api-key">Gemini API Key:</label>
+                    <input type="password" id="sim-api-key" class="form-control" placeholder="AIzaSy...">
+                  </div>
+                </div>
+              </details>
+
+              <button type="button" id="btn-evaluar-1" class="btn btn-primary btn-block">
+                <span class="btn-icon">🤖</span> Consultar al Agente Inteligente
+              </button>
             </form>
 
             <div id="resultado-sim-1" class="sim-output" aria-live="polite">
               <span class="output-label">Decisión del Agente:</span>
-              <p class="output-text">Seleccioná los parámetros y hacé clic en evaluar para ver la resolución.</p>
+              <p class="output-text">Seleccioná los parámetros de tu partido y consultá al agente para ver la búsqueda y recomendación en vivo.</p>
             </div>
           </div>
         </div>
