@@ -23,7 +23,7 @@ app.get('/api/partidos', (req, res) => {
 app.post('/api/agente-buscar', agenteBuscarHandler);
 
 // Fallback para SPA en desarrollo local
-app.get('/{*path}', (req, res) => {
+app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
