@@ -6,6 +6,28 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  const themeToggle = document.getElementById('theme-toggle');
+  const storedTheme = localStorage.getItem('fulyvale-theme');
+  let currentTheme = storedTheme === 'light' ? 'light' : 'dark';
+
+  function updateThemeToggle() {
+    const isLight = currentTheme === 'light';
+    const icon = isLight
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path></svg>'
+      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"></path></svg>';
+
+    document.documentElement.dataset.theme = currentTheme;
+    themeToggle.innerHTML = icon;
+    themeToggle.setAttribute('aria-label', 'Cambiar entre tema claro y oscuro');
+    themeToggle.setAttribute('aria-pressed', String(!isLight));
+  }
+
+  updateThemeToggle();
+  themeToggle.addEventListener('click', () => {
+    currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+    localStorage.setItem('fulyvale-theme', currentTheme);
+    updateThemeToggle();
+  });
 
   // ========================================================================
   // 1. CONSOLA DE INTERACCIÓN AGÉNTICA (Backend Node.js + Gemini 3.8 Flash)
