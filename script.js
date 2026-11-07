@@ -131,6 +131,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const mensajeUsuario = simMensajeAdicional ? simMensajeAdicional.value.trim() : '';
     const apiKey = simApiKey ? simApiKey.value.trim() : '';
 
+    // Función auxiliar para comprobar si un campo fue completado (no vacío ni "sin completar")
+    function esCampoEspecificado(val) {
+      if (!val) return false;
+      const s = String(val).trim().toLowerCase();
+      return s !== '' && !s.includes('sin completar') && !s.includes('--');
+    }
+
+    const zonaValida = esCampoEspecificado(zona);
+    const nivelValido = esCampoEspecificado(nivel);
+    const horarioValido = esCampoEspecificado(horario);
+
+    // Condición estricta solicitada: si falta cualquiera de los 3 parámetros, mostrar inmediatamente el cartel de aviso
+    // Aplica tanto a la búsqueda asistida con agente como a la búsqueda manual
+    if (!zonaValida || !nivelValido || !horarioValido) {
+      const faltantes = [];
+      if (!zonaValida) faltantes.push('Zona geográfica');
+      if (!nivelValido) faltantes.push('Nivel de juego');
+      if (!horarioValido) faltantes.push('Franja horaria');
+
+      const modoTexto = asistidaActiva ? 'la búsqueda asistida' : 'la búsqueda manual';
+
+      renderRespuestaAgente({
+        ok: true,
+        regla: 'Condición Incompleta',
+        estado: 'incompleto',
+        titulo: 'Parámetros Incompletos',
+        razonamiento_agente: `Para activar ${modoTexto} es requisito obligatorio completar los 3 parámetros (Zona, Nivel y Horario). Actualmente falta: ${faltantes.join(', ')}.`,
+        mensaje_usuario: `<div style="margin-top: 0.5rem; padding: 0.75rem 1rem; background: rgba(180, 83, 9, 0.15); border: 1px solid #b45309; border-radius: 8px; color: #fde68a; font-size: 0.9rem;">⚠️ <strong>Faltan datos obligatorios:</strong> Para activar ${modoTexto} se requiere completar: <em>${faltantes.join(', ')}</em>. Por favor, selecciona las opciones faltantes en el formulario.</div>`,
+        partidos: [],
+        modo_ia: false
+      });
+      return;
+    }
+
     // Estado visual de carga y mostrar botón de cancelación
     btnEvaluar1.disabled = true;
     if (btnCancelar1) {
@@ -218,12 +252,14 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (data.regla === 'R2') {
       reglaBadge = '<span class="badge" style="background:#475569; color:#fff;">Aplica Regla R2 · Modo Manual</span>';
     } else {
-      reglaBadge = '<span class="badge" style="background:#b45309; color:#fff;">Parámetros Incompletos</span>';
+      reglaBadge = '<span class="badge" style="background:#b45309; color:#fff;">Condición Incompleta</span>';
     }
 
-    const iaBadge = data.modo_ia
-      ? `<span class="badge" style="background:#4338ca; color:#fff;">✨ Gemini 3.8 Flash</span>`
-      : `<span class="badge" style="background:#1e293b; color:#cbd5e1; border:1px solid #334155;">Lógica Agéntica Local</span>`;
+    const iaBadge = data.estado === 'incompleto'
+      ? ''
+      : (data.modo_ia
+          ? `<span class="badge" style="background:#4338ca; color:#fff;">✨ Gemini 3.8 Flash</span>`
+          : `<span class="badge" style="background:#1e293b; color:#cbd5e1; border:1px solid #334155;">Lógica Agéntica Local</span>`);
 
     // Renderizar tarjetas de partidos de básquet reales
     let partidosHtml = '';
