@@ -239,12 +239,13 @@ body {
   transition: var(--transition);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .theme-toggle {
-    top: 76px;
-    right: 14px;
-    width: 36px;
-    height: 36px;
+    top: auto;
+    bottom: 20px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
   }
 }
 
@@ -267,6 +268,54 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 42px;
+  height: 42px;
+  padding: 0.5rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.nav-toggle:hover {
+  border-color: var(--primary);
+}
+
+.nav-toggle:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.nav-toggle-bar {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background-color: var(--text-main);
+  border-radius: 2px;
+  transition: var(--transition);
+}
+
+.nav-toggle.is-active .nav-toggle-bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle.is-active .nav-toggle-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle.is-active .nav-toggle-bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
 }
 
 .brand-link {
@@ -1247,6 +1296,7 @@ body {
 .switch-slider {
   position: relative;
   display: inline-block;
+  flex-shrink: 0;
   width: 44px;
   height: 24px;
   background-color: var(--switch-bg);
@@ -1485,29 +1535,266 @@ body {
 }
 
 /* ==========================================================================
-   Responsive Desktop-First y Adaptabilidad
+   Responsive Multi-Dispositivo (Desktop, Tablet y Móvil)
    ========================================================================== */
 @media (max-width: 992px) {
+  .section {
+    padding: 4rem 0;
+  }
+
+  .hero-section {
+    padding: 3.5rem 0 4rem;
+  }
+
   .hero-grid {
     grid-template-columns: 1fr;
     text-align: center;
+    gap: 2.5rem;
   }
+
+  .hero-title {
+    font-size: clamp(2rem, 4.5vw, 2.65rem);
+  }
+
   .hero-actions {
     justify-content: center;
+    flex-wrap: wrap;
   }
+
   .hero-meta {
     justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.25rem;
   }
+
   .grid-3 {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
+
+  .grid-3.sim-inputs-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
   .simulator-grid {
     grid-template-columns: 1fr;
   }
+
   .team-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
+
   .audit-body {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1.15rem;
+    padding-right: 1.15rem;
+  }
+
+  .section {
+    padding: 3.25rem 0;
+  }
+
+  .section-header {
+    margin-bottom: 2.25rem;
+  }
+
+  .section-title,
+  .module-title {
+    font-size: clamp(1.55rem, 5vw, 2rem);
+  }
+
+  .section-subtitle,
+  .module-benefit,
+  .hero-description {
+    font-size: 1rem;
+  }
+
+  /* Menú colapsable en móvil */
+  .nav-toggle {
+    display: inline-flex;
+  }
+
+  .nav-menu {
+    display: none;
+    width: 100%;
+    padding-top: 0.75rem;
+    margin-top: 0.25rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .nav-menu.is-open {
+    display: block;
+  }
+
+  .nav-list {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.4rem;
+  }
+
+  .nav-link {
+    display: block;
+    padding: 0.65rem 0.85rem;
+    text-align: left;
+  }
+
+  .nav-btn-cta {
+    text-align: center;
+    margin-top: 0.25rem;
+  }
+
+  /* Grillas a 1 columna */
+  .grid-3,
+  .grid-2,
+  .grid-3.sim-inputs-grid,
+  .team-grid,
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  /* Hero */
+  .hero-section {
+    padding: 2.5rem 0 3.25rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
+
+  .hero-meta {
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .meta-divider {
+    display: none;
+  }
+
+  .hero-card-brand {
+    padding: 1.75rem 1.25rem;
+    max-width: 310px;
+  }
+
+  .hero-card-logo {
+    max-width: 160px;
+  }
+
+  /* Tarjetas, contenedores y acordeones */
+  .card,
+  .sentences-box,
+  .flowchart-container,
+  .sim-card,
+  .audit-card,
+  .team-card {
+    padding: 1.25rem;
+  }
+
+  .banner-origin {
+    padding: 1rem 1.25rem;
+  }
+
+  .module-meta {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .accordion-trigger {
+    padding: 1rem 1.15rem;
+    font-size: 0.95rem;
+    gap: 0.75rem;
+  }
+
+  .accordion-body {
+    padding: 0 1.15rem 1.15rem;
+  }
+
+  /* Diagrama SVG desplazable táctilmente */
+  .svg-wrapper {
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -0.25rem;
+    padding: 0.5rem 0.25rem;
+  }
+
+  .flow-svg {
+    min-width: 660px;
+  }
+
+  /* Simulador */
+  .sim-actions-group {
+    flex-direction: column;
+  }
+
+  .sim-actions-group .btn {
+    width: 100%;
+  }
+
+  .audit-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  /* Footer */
+  .footer-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-brand {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding-left: 0.95rem;
+    padding-right: 0.95rem;
+  }
+
+  .brand-logo {
+    width: 38px;
+    height: auto;
+  }
+
+  .brand-title {
+    font-size: 1rem;
+  }
+
+  .brand-badge {
+    font-size: 0.68rem;
+  }
+
+  .hero-title {
+    font-size: 1.75rem;
+  }
+
+  .badge-tag {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.75rem;
+  }
+
+  .flowchart-legend {
+    gap: 0.4rem;
+  }
+
+  .legend-chip {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.55rem;
+  }
+
+  .sim-output {
+    padding: 1rem;
   }
 }

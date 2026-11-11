@@ -29,6 +29,38 @@ document.addEventListener('DOMContentLoaded', () => {
     updateThemeToggle();
   });
 
+  // Menú de navegación responsivo (móvil / tablet)
+  const navToggle = document.getElementById('nav-toggle');
+  const navMenu = document.getElementById('nav-menu');
+
+  if (navToggle && navMenu) {
+    function setMenuOpen(isOpen) {
+      navMenu.classList.toggle('is-open', isOpen);
+      navToggle.classList.toggle('is-active', isOpen);
+      navToggle.setAttribute('aria-expanded', String(isOpen));
+      navToggle.setAttribute(
+        'aria-label',
+        isOpen ? 'Cerrar menú de navegación' : 'Abrir menú de navegación'
+      );
+    }
+
+    navToggle.addEventListener('click', () => {
+      const isOpen = navToggle.getAttribute('aria-expanded') === 'true';
+      setMenuOpen(!isOpen);
+    });
+
+    navMenu.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', () => setMenuOpen(false));
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && navMenu.classList.contains('is-open')) {
+        setMenuOpen(false);
+        navToggle.focus();
+      }
+    });
+  }
+
   // ========================================================================
   // 1. CONSOLA DE INTERACCIÓN AGÉNTICA (Backend Node.js + Gemini 3.8 Flash)
   // ========================================================================
@@ -275,7 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.75rem; color: #f8fafc;">
             🏀 ${tituloResultados} (${data.partidos.length}):
           </h4>
-          <div class="matches-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.85rem;">
+          <div class="matches-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: 0.85rem;">
             ${data.partidos.map(p => `
               <div class="match-mini-card" style="background:#1e293b; border:1px solid #334155; border-radius:10px; padding:0.85rem;">
                 <div style="font-weight:700; font-size:0.95rem; color:#f36b21; margin-bottom:0.25rem;">${p.club}</div>
