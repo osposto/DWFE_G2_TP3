@@ -74,32 +74,34 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnCancelar1 = document.getElementById('btn-cancelar-1');
   const outSim1 = document.getElementById('resultado-sim-1');
 
-  const flowSvg = document.querySelector('.flow-svg');
+  const flowSvgs = document.querySelectorAll('.flow-svg');
 
-  if (flowSvg) {
-    const flowNodes = flowSvg.querySelectorAll('.svg-interactive-node');
-    const flowLines = flowSvg.querySelectorAll('.svg-line[data-from][data-to]');
+  if (flowSvgs.length > 0) {
+    const allFlowNodes = document.querySelectorAll('.flow-svg .svg-interactive-node');
+    const allFlowLines = document.querySelectorAll('.flow-svg .svg-line[data-from][data-to]');
 
     function selectFlowNode(selectedNode) {
       const clearSelection = selectedNode.classList.contains('is-selected');
       const selectedId = selectedNode.dataset.node;
 
-      flowSvg.classList.toggle('has-selection', !clearSelection);
+      flowSvgs.forEach(svg => {
+        svg.classList.toggle('has-selection', !clearSelection);
+      });
 
-      flowNodes.forEach(node => {
-        const isSelected = !clearSelection && node === selectedNode;
+      allFlowNodes.forEach(node => {
+        const isSelected = !clearSelection && node.dataset.node === selectedId;
         node.classList.toggle('is-selected', isSelected);
         node.setAttribute('aria-pressed', String(isSelected));
       });
 
-      flowLines.forEach(line => {
+      allFlowLines.forEach(line => {
         const isConnected = !clearSelection
           && (line.dataset.from === selectedId || line.dataset.to === selectedId);
         line.classList.toggle('is-selected', isConnected);
       });
     }
 
-    flowNodes.forEach(node => {
+    allFlowNodes.forEach(node => {
       node.addEventListener('click', () => selectFlowNode(node));
       node.addEventListener('keydown', event => {
         if (event.key === 'Enter' || event.key === ' ') {
