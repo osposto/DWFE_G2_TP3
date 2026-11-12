@@ -15,3 +15,11 @@ Thumbs.db
 # Versión de prueba aislada (no modificar)
 Prueba1/
 
+# Documentos locales de entrega y edición interna (no subir a GitHub)
+documentos/
+docs_entrega/
+DOCUMENTO_ENTREGA*
+*.docx
+*.doc
+entrega_privada/
+
