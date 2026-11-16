@@ -80,33 +80,58 @@ document.addEventListener('DOMContentLoaded', () => {
     const allFlowNodes = document.querySelectorAll('.flow-svg .svg-interactive-node');
     const allFlowLines = document.querySelectorAll('.flow-svg .svg-line[data-from][data-to]');
 
-    function selectFlowNode(selectedNode) {
-      const clearSelection = selectedNode.classList.contains('is-selected');
-      const selectedId = selectedNode.dataset.node;
+    let currentSelectedId = null;
+    let currentHoveredId = null;
+
+    function updateFlowchartHighlight() {
+      // Priorizar el elemento sobre el que está el cursor (hover), o el seleccionado por clic
+      const activeId = currentHoveredId || currentSelectedId;
+      const hasActive = Boolean(activeId);
 
       flowSvgs.forEach(svg => {
-        svg.classList.toggle('has-selection', !clearSelection);
+        svg.classList.toggle('has-selection', hasActive);
       });
 
       allFlowNodes.forEach(node => {
-        const isSelected = !clearSelection && node.dataset.node === selectedId;
-        node.classList.toggle('is-selected', isSelected);
+        const isHoveredOrActive = hasActive && node.dataset.node === activeId;
+        const isSelected = Boolean(currentSelectedId && node.dataset.node === currentSelectedId);
+        node.classList.toggle('is-selected', isHoveredOrActive || isSelected);
         node.setAttribute('aria-pressed', String(isSelected));
       });
 
       allFlowLines.forEach(line => {
-        const isConnected = !clearSelection
-          && (line.dataset.from === selectedId || line.dataset.to === selectedId);
+        const isConnected = hasActive && (line.dataset.from === activeId || line.dataset.to === activeId);
         line.classList.toggle('is-selected', isConnected);
       });
     }
 
+    function toggleSelectNode(node) {
+      const nodeId = node.dataset.node;
+      currentSelectedId = (currentSelectedId === nodeId) ? null : nodeId;
+      updateFlowchartHighlight();
+    }
+
     allFlowNodes.forEach(node => {
-      node.addEventListener('click', () => selectFlowNode(node));
+      // Resaltar al pasar el mouse por el bloque (hover)
+      node.addEventListener('mouseenter', () => {
+        currentHoveredId = node.dataset.node;
+        updateFlowchartHighlight();
+      });
+
+      node.addEventListener('mouseleave', () => {
+        currentHoveredId = null;
+        updateFlowchartHighlight();
+      });
+
+      // Selección persistente al hacer clic o mediante teclado (Enter / Espacio)
+      node.addEventListener('click', () => {
+        toggleSelectNode(node);
+      });
+
       node.addEventListener('keydown', event => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
-          selectFlowNode(node);
+          toggleSelectNode(node);
         }
       });
     });
