@@ -121,4 +121,4 @@ Para ejecutar y probar la landing page en un entorno local con **Node.js**:
 ## 7. Enlaces del Proyecto
 
 * **Repositorio de código:** https://github.com/osposto/DWFE_G2_TP3
-* **Landing publicada:** https://dwfe-g2-tp3.vercer.app
+* **Landing publicada:** https://dwfe-g2-tp3.vercel.app
